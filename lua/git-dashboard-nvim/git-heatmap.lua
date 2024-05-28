@@ -18,17 +18,22 @@ end
 
 -- if cache file exists, print it and return
 local cache_dir = vim.fn.stdpath("cache")
-local cache_file = cache_dir .. "/git-dashboard-nvim/gh-heatmap-" .. repo:gsub("/", "-") .. ".txt"
-local log_file = cache_dir .. "/git-dashboard-nvim/gh-heatmap-" .. repo:gsub("/", "-") .. ".log"
 
-local cache_file_handle = io.open(cache_file, "r")
+local heatmap_cache = cache_dir .. "/git-dashboard-nvim/gh-heatmap-" .. repo:gsub("/", "-") .. ".txt"
 
-if cache_file_handle then
-	local cache_content = cache_file_handle:read("*a")
-	cache_file_handle:close()
+local heatmap_cache_file_handle = io.open(heatmap_cache, "r")
 
-	print(cache_content)
-	return
+if heatmap_cache_file_handle then
+	P("cache exists")
+	-- if last modified date is 10 minutes ago, then refresh cache
+	local last_modified = vim.fn.getftime(heatmap_cache)
+
+	if os.difftime(os.time(), last_modified) < 600 then
+		local ascii_heatmap = heatmap_cache_file_handle:read("*a")
+		heatmap_cache_file_handle:close()
+		print(ascii_heatmap)
+		return
+	end
 end
 
 -- todo: dates are in UTC, need to convert to local time
@@ -132,20 +137,9 @@ if directory_exists == 0 then
 	vim.fn.mkdir(cache_dir .. "/git-dashboard-nvim")
 end
 
-if cache_file_handle then
-	cache_file_handle:write(ascii_heatmap)
-	cache_file_handle:close()
-end
-
--- log the timestamp of the last update of the heatmap
-local log_file_handle = io.open(log_file, "w")
-
-if log_file_handle then
-	local date = os.date("%Y-%m-%d %H:%M:%S")
-	if date then
-		log_file_handle:write("Last updated: " .. date .. "\n")
-		log_file_handle:close()
-	end
+if heatmap_cache_file_handle then
+	heatmap_cache_file_handle:write(ascii_heatmap)
+	heatmap_cache_file_handle:close()
 end
 
 print(ascii_heatmap)

@@ -1,6 +1,5 @@
 GitHubAPI = {}
 
--- check if gh is installed
 GitHubAPI.is_gh_installed = function()
 	return vim.fn.systemlist("gh 2>/dev/null")[1] ~= nil
 end
@@ -23,7 +22,6 @@ GitHubAPI.get_commit_dates = function(repo, emailOrName)
 
 	local commits = vim.fn.systemlist(get_commits_command)
 
-	-- if commits is {} then return nil
 	if commits[1] == "{}" then
 		return nil
 	end

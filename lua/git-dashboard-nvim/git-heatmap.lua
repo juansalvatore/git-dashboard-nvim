@@ -1,7 +1,11 @@
 local GitHubAPI = require("git-dashboard-nvim.githubapi")
 
-local function main()
-	local _name = "Juan Salvatore"
+local function main(config)
+	local author = config.author or ""
+	local branch = config.branch or "main"
+	local empty_square = config.empty_square or "□"
+	local filled_square = config.filled_square or "■"
+	local gap = " "
 
 	-- get repo with owner and commits
 	local repo = GitHubAPI.get_repo_with_owner() -- owner/repo
@@ -28,7 +32,8 @@ local function main()
 	-- end
 
 	-- todo: dates are in UTC, need to convert to local time
-	local commits = GitHubAPI.get_commit_dates(repo, _name) -- {{ day = 1, month = 1, year = 2021 }, ...}
+	local commits = GitHubAPI.get_commit_dates(author, branch) -- {{ day = 1, month = 1, year = 2021 }, ...}
+	P(commits)
 
 	local heatmap = {}
 
@@ -50,37 +55,11 @@ local function main()
 		end
 	end
 
-	-- local function get_week(date)
-	-- 	local year, month, day = date:match("(%d+)-(%d+)-(%d+)")
-	-- 	local week = os.date("%U", os.time({ year = year, month = month, day = day }))
-	-- 	return tonumber(week)
-	-- end
-	--
-	-- local function get_day_of_week(date)
-	-- 	local year, month, day = date:match("(%d+)-(%d+)-(%d+)")
-	-- 	local day_of_week = os.date("%w", os.time({ year = year, month = month, day = day }))
-	-- 	return tonumber(day_of_week)
-	-- end
-
 	for _, commit_date in ipairs(commits) do
 		-- if commit date is in the future or before January 1st of current year, then skip
-
 		local week = commit_date.week
-		local day_of_week = commit_date.day_of_week
+		local day_of_week = commit_date.day_of_week + 1
 
-		-- if week == current_week then
-		-- 	break
-		-- end
-
-		-- if not heatmap[week] then
-		-- 	return ""
-		-- end
-		--
-		-- if not heatmap[week][day_of_week] then
-		-- 	return ""
-		-- end
-
-		-- heatmap[week][day_of_week] = heatmap[week][day_of_week] + 1
 		if not heatmap[week] then
 			heatmap[week] = {}
 		end
@@ -95,10 +74,7 @@ local function main()
 	local ascii_heatmap = ""
 
 	local empty = " "
-	local empty_square = "□"
-	local filled_square = "■"
 	local show_repo_name = true
-	local gap = " "
 
 	local days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" }
 
@@ -155,7 +131,5 @@ local function main()
 
 	return ascii_heatmap
 end
-
-main()
 
 return main

@@ -1,9 +1,5 @@
 GitHubAPI = {}
 
-GitHubAPI.is_gh_installed = function()
-	return vim.fn.systemlist("gh 2>/dev/null")[1] ~= nil
-end
-
 GitHubAPI.get_repo_with_owner = function()
 	local handle = io.popen("git remote get-url origin 2>/dev/null")
 	if not handle then
@@ -40,13 +36,14 @@ local function parse_date(date)
 	}
 end
 
-GitHubAPI.get_commit_dates = function(repo, emailOrName)
+GitHubAPI.get_commit_dates = function(username, branch)
 	local commits = {}
 
-	local username = "Juan Salvatore"
 	-- Execute git command
 	local git_command = string.format(
-		'git log main --author="%s" --since="2024-01-01" --date=format:"%%Y-%%m-%%dT%%H:%%M:%%SZ" --pretty=format:"%%ad"',
+		"git log "
+			.. branch
+			.. ' --author="%s" --since="2024-01-01" --date=format:"%%Y-%%m-%%dT%%H:%%M:%%SZ" --pretty=format:"%%ad"',
 		username
 	)
 	local handle = io.popen(git_command)
@@ -64,12 +61,6 @@ GitHubAPI.get_commit_dates = function(repo, emailOrName)
 	handle:close()
 
 	return commits
-end
-
--- check if gh is installed
-if not GitHubAPI.is_gh_installed() then
-	print("GitHub CLI is not installed. Please install it to use this plugin.")
-	return
 end
 
 return GitHubAPI

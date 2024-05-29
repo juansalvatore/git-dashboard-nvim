@@ -34,3 +34,5 @@ if not GitHubAPI.is_gh_installed() then
 	print("GitHub CLI is not installed. Please install it to use this plugin.")
 	return
 end
+
+return GitHubAPI

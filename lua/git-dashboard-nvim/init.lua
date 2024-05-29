@@ -1,15 +1,9 @@
+local heatmap = require("git-dashboard-nvim.git-heatmap")
+
 M = {}
 
-M.setup = function(config)
-	print("git dashboard nvim setup")
-	P(config)
+M.setup = function()
+	heatmap()
 end
-
-M.config = {
-	theme = "github",
-	preview = {
-		enabled = true,
-	},
-}
 
 return M

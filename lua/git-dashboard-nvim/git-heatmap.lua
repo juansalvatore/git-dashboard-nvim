@@ -6,24 +6,19 @@ local function main()
 	-- check if gh is installed
 	if not GitHubAPI.is_gh_installed() then
 		print("GitHub CLI is not installed. Please install it to use this plugin.")
-		return
+		return ""
 	end
 
 	-- get repo with owner and commits
 	local repo = GitHubAPI.get_repo_with_owner() -- owner/repo
 
-	P(repo)
-
-	if not repo then
-		return
+	if repo == "" then
+		return ""
 	end
 
-	P(vim.api.nvim_buf_get_name(0))
 	-- if cache file exists, print it and return
 	local cache_dir = vim.fn.stdpath("cache")
-
 	local heatmap_cache = cache_dir .. "/git-dashboard-nvim/gh-heatmap-" .. repo:gsub("/", "-") .. ".txt"
-
 	local heatmap_cache_file_handle = io.open(heatmap_cache, "r")
 
 	if heatmap_cache_file_handle then
@@ -33,28 +28,18 @@ local function main()
 		if os.difftime(os.time(), last_modified) < 600 then
 			local ascii_heatmap = heatmap_cache_file_handle:read("*a")
 			heatmap_cache_file_handle:close()
-			print("bye")
 
-			-- vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(ascii_heatmap, "\n"))
-
-			require("dashboard").setup({
-				config = {
-					header = vim.split(ascii_heatmap, "\n"),
-				},
-			})
-			return
+			return ascii_heatmap
 		end
 	end
 
 	-- todo: dates are in UTC, need to convert to local time
 	local commits = GitHubAPI.get_commit_dates(repo, _name) -- { "2024-05-27T21:51:12Z" }
 
-	if not commits then
+	if commits == "" then
 		print("No commits found.")
 		return
 	end
-
-	P(commits)
 
 	local heatmap = {}
 
@@ -156,12 +141,7 @@ local function main()
 		heatmap_cache_file_handle:close()
 	end
 
-	print("hello")
-	require("dashboard").setup({
-		config = {
-			header = vim.split(ascii_heatmap, "\n"),
-		},
-	})
+	return ascii_heatmap
 end
 
 return main

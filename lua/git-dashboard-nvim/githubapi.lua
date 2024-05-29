@@ -5,10 +5,25 @@ GitHubAPI.is_gh_installed = function()
 end
 
 GitHubAPI.get_repo_with_owner = function()
-	local get_repo_command = "gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null"
-	local repo = vim.fn.systemlist(get_repo_command)[1]
+	local handle = io.popen("git remote get-url origin 2>/dev/null")
+	if not handle then
+		return ""
+	end
 
-	return repo
+	local remote_url = handle:read("*a")
+	handle:close()
+
+	if remote_url and remote_url ~= "" then
+		remote_url = remote_url:gsub("%s+", "") -- Remove any trailing newlines or spaces
+
+		local name_with_owner = remote_url:match("github%.com[:/]([^/]+/[^/.]+)%.git")
+			or remote_url:match("github%.com[:/]([^/]+/[^/.]+)")
+		if name_with_owner then
+			return name_with_owner
+		end
+	end
+
+	return ""
 end
 
 GitHubAPI.get_commit_dates = function(repo, emailOrName)

@@ -3,7 +3,7 @@ local heatmap = require("git-dashboard-nvim.git-heatmap")
 M = {}
 
 M.setup = function()
-	heatmap()
+	return heatmap()
 end
 
 return M

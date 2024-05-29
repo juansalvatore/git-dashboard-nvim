@@ -3,9 +3,16 @@ local GitHubAPI = require("git-dashboard-nvim.githubapi")
 local function main(config)
 	local author = config.author or ""
 	local branch = config.branch or "main"
+
 	local empty_square = config.empty_square or "□"
 	local filled_square = config.filled_square or "■"
-	local gap = " "
+	local show_repo_name = config.show_repo_name or true
+
+	local should_cache = config.should_cache or false
+	local cache_time = config.cache_time or 600
+
+	local gap = config.gap or " "
+	local day_label_gap = config.day_label_gap or " "
 
 	-- get repo with owner and commits
 	local repo = GitHubAPI.get_repo_with_owner() -- owner/repo
@@ -19,21 +26,20 @@ local function main(config)
 	local heatmap_cache = cache_dir .. "/git-dashboard-nvim/gh-heatmap-" .. repo:gsub("/", "-") .. ".txt"
 	local heatmap_cache_file_handle = io.open(heatmap_cache, "r")
 
-	-- if heatmap_cache_file_handle then
-	-- 	-- if last modified date is 10 minutes ago, then refresh cache
-	-- 	local last_modified = vim.fn.getftime(heatmap_cache)
-	--
-	-- 	if os.difftime(os.time(), last_modified) < 600 then
-	-- 		local ascii_heatmap = heatmap_cache_file_handle:read("*a")
-	-- 		heatmap_cache_file_handle:close()
-	--
-	-- 		return ascii_heatmap
-	-- 	end
-	-- end
+	if heatmap_cache_file_handle and should_cache then
+		-- if last modified date is 10 minutes ago, then refresh cache
+		local last_modified = vim.fn.getftime(heatmap_cache)
+
+		if os.difftime(os.time(), last_modified) < cache_time then
+			local ascii_heatmap = heatmap_cache_file_handle:read("*a")
+			heatmap_cache_file_handle:close()
+
+			return ascii_heatmap
+		end
+	end
 
 	-- todo: dates are in UTC, need to convert to local time
-	local commits = GitHubAPI.get_commit_dates(author, branch) -- {{ day = 1, month = 1, year = 2021 }, ...}
-	P(commits)
+	local commits = GitHubAPI.get_commit_dates(author, branch)
 
 	local heatmap = {}
 
@@ -74,7 +80,6 @@ local function main(config)
 	local ascii_heatmap = ""
 
 	local empty = " "
-	local show_repo_name = true
 
 	local days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" }
 
@@ -85,20 +90,21 @@ local function main(config)
 		ascii_heatmap = ascii_heatmap .. "\n" .. repo .. "\n\n"
 	end
 
-	-- add correct spacings based on month length to align with days
-	for i = 1, current_month do
-		ascii_heatmap = ascii_heatmap .. "   " .. gap .. months[i] .. " "
-	end
-	ascii_heatmap = ascii_heatmap .. "   " .. gap
+	if #gap == 1 then
+		for i = 1, current_month do
+			ascii_heatmap = ascii_heatmap .. "   " .. gap .. months[i] .. " "
+		end
+		ascii_heatmap = ascii_heatmap .. "   " .. gap
 
-	-- if last week of the month add extra spacing
-	if #heatmap < weeks_in_year then
-		ascii_heatmap = ascii_heatmap .. "  "
+		-- if last week of the month add extra spacing
+		if #heatmap < weeks_in_year then
+			ascii_heatmap = ascii_heatmap .. "  "
+		end
+		ascii_heatmap = ascii_heatmap .. "\n"
 	end
-	ascii_heatmap = ascii_heatmap .. "\n"
 
 	for i = 1, days_in_week do
-		ascii_heatmap = ascii_heatmap .. days[i] .. gap
+		ascii_heatmap = ascii_heatmap .. days[i] .. day_label_gap
 
 		-- if day in week is higher than current day of week, then it's in the future and we don't need to print it
 		for j = 1, #heatmap do
@@ -116,17 +122,19 @@ local function main(config)
 	end
 
 	-- create cache file for repo heatmap
-	local directory_exists = vim.fn.isdirectory(cache_dir .. "/git-dashboard-nvim")
+	if should_cache then
+		local directory_exists = vim.fn.isdirectory(cache_dir .. "/git-dashboard-nvim")
 
-	if directory_exists == 0 then
-		vim.fn.mkdir(cache_dir .. "/git-dashboard-nvim")
-	end
+		if directory_exists == 0 then
+			vim.fn.mkdir(cache_dir .. "/git-dashboard-nvim")
+		end
 
-	heatmap_cache_file_handle = io.open(heatmap_cache, "w+")
+		heatmap_cache_file_handle = io.open(heatmap_cache, "w+")
 
-	if heatmap_cache_file_handle then
-		heatmap_cache_file_handle:write(ascii_heatmap)
-		heatmap_cache_file_handle:close()
+		if heatmap_cache_file_handle then
+			heatmap_cache_file_handle:write(ascii_heatmap)
+			heatmap_cache_file_handle:close()
+		end
 	end
 
 	return ascii_heatmap

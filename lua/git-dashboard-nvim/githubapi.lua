@@ -39,13 +39,19 @@ end
 GitHubAPI.get_commit_dates = function(username, branch)
 	local commits = {}
 
-	-- Execute git command
+	local current_year = tonumber(os.date("%Y"))
+
+	local since_date = os.date("%Y-%m-%d", os.time({ year = current_year, month = 1, day = 1 }))
+
 	local git_command = string.format(
 		"git log "
 			.. branch
-			.. ' --author="%s" --since="2024-01-01" --date=format:"%%Y-%%m-%%dT%%H:%%M:%%SZ" --pretty=format:"%%ad"',
+			.. ' --author="%s" --since="'
+			.. since_date
+			.. '" --date=format:"%%Y-%%m-%%dT%%H:%%M:%%SZ" --pretty=format:"%%ad"',
 		username
 	)
+
 	local handle = io.popen(git_command)
 
 	if not handle then

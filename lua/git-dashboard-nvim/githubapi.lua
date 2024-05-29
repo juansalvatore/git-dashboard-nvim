@@ -26,20 +26,42 @@ GitHubAPI.get_repo_with_owner = function()
 	return ""
 end
 
+local function parse_date(date)
+	local year, month, day = date:match("(%d+)-(%d+)-(%d+)")
+	local week = os.date("%U", os.time({ year = year, month = month, day = day }))
+	local day_of_week = os.date("%w", os.time({ year = year, month = month, day = day }))
+
+	return {
+		year = tonumber(year),
+		month = tonumber(month),
+		day = tonumber(day),
+		week = tonumber(week),
+		day_of_week = tonumber(day_of_week),
+	}
+end
+
 GitHubAPI.get_commit_dates = function(repo, emailOrName)
-	-- todo: only get commits from the last year
-	local get_commits_command = string.format(
-		'gh api -X GET "repos/%s/commits" --paginate --jq ".[] | select(.commit.author.email == \\"%s\\" or .commit.author.name == \\"%s\\") | .commit.author.date" 2>/dev/null',
-		repo,
-		emailOrName,
-		emailOrName
+	local commits = {}
+
+	local username = "Juan Salvatore"
+	-- Execute git command
+	local git_command = string.format(
+		'git log main --author="%s" --since="2024-01-01" --date=format:"%%Y-%%m-%%dT%%H:%%M:%%SZ" --pretty=format:"%%ad"',
+		username
 	)
+	local handle = io.popen(git_command)
 
-	local commits = vim.fn.systemlist(get_commits_command)
-
-	if commits[1] == "{}" then
-		return nil
+	if not handle then
+		return commits
 	end
+
+	-- Read output line by line and parse date
+	for line in handle:lines() do
+		local date = parse_date(line)
+		table.insert(commits, date)
+	end
+
+	handle:close()
 
 	return commits
 end

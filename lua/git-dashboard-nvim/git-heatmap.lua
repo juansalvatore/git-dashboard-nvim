@@ -87,7 +87,7 @@ local function main(config)
 	local current_month = os.date("%m")
 
 	if show_repo_name then
-		ascii_heatmap = ascii_heatmap .. "\n" .. repo .. "\n\n"
+		ascii_heatmap = ascii_heatmap .. repo .. "\n\n"
 	end
 
 	if #gap == 1 then

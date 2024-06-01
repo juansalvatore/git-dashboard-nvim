@@ -39,7 +39,7 @@ end
 GitHubAPI.get_commit_dates = function(username, branch)
 	local commits = {}
 
-	local current_year = tonumber(os.date("%Y"))
+	local current_year = tostring(os.date("%Y"))
 
 	local since_date = os.date("%Y-%m-%d", os.time({ year = current_year, month = 1, day = 1 }))
 

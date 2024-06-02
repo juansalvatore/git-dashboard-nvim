@@ -36,12 +36,20 @@ local function parse_date(date)
 	}
 end
 
-GitHubAPI.get_commit_dates = function(username, branch)
+GitHubAPI.get_commit_dates = function(username, _branch)
 	local commits = {}
 
 	local current_year = tostring(os.date("%Y"))
 
 	local since_date = os.date("%Y-%m-%d", os.time({ year = current_year, month = 1, day = 1 }))
+
+	local branch = _branch
+
+	if _branch == "main" then
+		branch = _branch
+	else
+		branch = branch .. " --not origin/main"
+	end
 
 	local git_command = string.format(
 		"git log "

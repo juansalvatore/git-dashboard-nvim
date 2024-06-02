@@ -18,7 +18,7 @@ M.setup = function(config)
 	local bottom_padding = config.bottom_padding or 0
 
 	-- create an autocommand on BufWritePost when a command is ran using :! to call the dashboard redraw from require('dashboard')
-	vim.api.nvim_create_autocmd({ "ShellCmdPost" }, {
+	vim.api.nvim_create_autocmd({ "ShellCmdPost", "CmdlineEnter" }, {
 		callback = function()
 			vim.cmd("silent! Lazy reload dashboard-nvim")
 

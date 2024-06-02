@@ -1,4 +1,4 @@
-local GitHubAPI = require("git-dashboard-nvim.githubapi")
+local Git = require("git-dashboard-nvim.git")
 
 M = {}
 
@@ -15,7 +15,7 @@ M.generate_heatmap = function(config)
 	local use_current_branch = config.use_current_branch or true
 
 	if use_current_branch then
-		branch = GitHubAPI.get_current_branch()
+		branch = Git.get_current_branch()
 	end
 
 	local should_cache = config.should_cache or false
@@ -25,31 +25,13 @@ M.generate_heatmap = function(config)
 	local day_label_gap = config.day_label_gap or " "
 
 	-- get repo with owner and commits
-	local repo = GitHubAPI.get_repo_with_owner() -- owner/repo
+	local repo = Git.get_repo_with_owner() -- owner/repo
 
 	if repo == "" or not repo then
 		return ""
 	end
 
-	-- if cache file exists, print it and return
-	local cache_dir = vim.fn.stdpath("cache")
-	local heatmap_cache = cache_dir .. "/git-dashboard-nvim/gh-heatmap-" .. repo:gsub("/", "-") .. ".txt"
-	local heatmap_cache_file_handle = io.open(heatmap_cache, "r")
-
-	if heatmap_cache_file_handle and should_cache then
-		-- if last modified date is 10 minutes ago, then refresh cache
-		local last_modified = vim.fn.getftime(heatmap_cache)
-
-		if os.difftime(os.time(), last_modified) < cache_time then
-			local ascii_heatmap = heatmap_cache_file_handle:read("*a")
-			heatmap_cache_file_handle:close()
-
-			return ascii_heatmap
-		end
-	end
-
-	-- todo: dates are in UTC, need to convert to local time
-	local commits = GitHubAPI.get_commit_dates(author, branch)
+	local commits = Git.get_commit_dates(author, branch)
 
 	local heatmap = {}
 
@@ -144,22 +126,6 @@ M.generate_heatmap = function(config)
 
 	if show_current_branch then
 		ascii_heatmap = ascii_heatmap .. "\n" .. " " .. branch
-	end
-
-	-- create cache file for repo heatmap
-	if should_cache then
-		local directory_exists = vim.fn.isdirectory(cache_dir .. "/git-dashboard-nvim")
-
-		if directory_exists == 0 then
-			vim.fn.mkdir(cache_dir .. "/git-dashboard-nvim")
-		end
-
-		heatmap_cache_file_handle = io.open(heatmap_cache, "w+")
-
-		if heatmap_cache_file_handle then
-			heatmap_cache_file_handle:write(ascii_heatmap)
-			heatmap_cache_file_handle:close()
-		end
 	end
 
 	return ascii_heatmap

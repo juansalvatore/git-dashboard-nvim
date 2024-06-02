@@ -1,6 +1,8 @@
-GitHubAPI = {}
+local utils = require("git-dashboard-nvim.utils")
 
-GitHubAPI.get_repo_with_owner = function()
+Git = {}
+
+Git.get_repo_with_owner = function()
 	local handle = io.popen("git remote get-url origin 2>/dev/null")
 	if not handle then
 		return ""
@@ -22,21 +24,7 @@ GitHubAPI.get_repo_with_owner = function()
 	return ""
 end
 
-local function parse_date(date)
-	local year, month, day = date:match("(%d+)-(%d+)-(%d+)")
-	local week = os.date("%U", os.time({ year = year, month = month, day = day }))
-	local day_of_week = os.date("%w", os.time({ year = year, month = month, day = day }))
-
-	return {
-		year = tonumber(year),
-		month = tonumber(month),
-		day = tonumber(day),
-		week = tonumber(week),
-		day_of_week = tonumber(day_of_week),
-	}
-end
-
-GitHubAPI.get_commit_dates = function(username, _branch)
+Git.get_commit_dates = function(username, _branch)
 	local commits = {}
 
 	local current_year = tostring(os.date("%Y"))
@@ -68,7 +56,7 @@ GitHubAPI.get_commit_dates = function(username, _branch)
 
 	-- Read output line by line and parse date
 	for line in handle:lines() do
-		local date = parse_date(line)
+		local date = utils.parse_date(line)
 		table.insert(commits, date)
 	end
 
@@ -77,7 +65,7 @@ GitHubAPI.get_commit_dates = function(username, _branch)
 	return commits
 end
 
-GitHubAPI.get_current_branch = function()
+Git.get_current_branch = function()
 	local handle = io.popen("git branch --show-current 2>/dev/null")
 	if not handle then
 		return ""
@@ -93,6 +81,4 @@ GitHubAPI.get_current_branch = function()
 	return ""
 end
 
-P(GitHubAPI.get_current_branch())
-
-return GitHubAPI
+return Git

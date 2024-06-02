@@ -69,4 +69,22 @@ GitHubAPI.get_commit_dates = function(username, branch)
 	return commits
 end
 
+GitHubAPI.get_current_branch = function()
+	local handle = io.popen("git branch --show-current 2>/dev/null")
+	if not handle then
+		return ""
+	end
+
+	local branch = handle:read("*a")
+	handle:close()
+
+	if branch and branch ~= "" then
+		return branch:gsub("%s+", "") -- Remove any trailing newlines or spaces
+	end
+
+	return ""
+end
+
+P(GitHubAPI.get_current_branch())
+
 return GitHubAPI

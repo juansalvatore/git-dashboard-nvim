@@ -1,12 +1,22 @@
 local GitHubAPI = require("git-dashboard-nvim.githubapi")
 
-local function main(config)
+M = {}
+
+M.generate_heatmap = function(config)
 	local author = config.author or ""
 	local branch = config.branch or "main"
 
 	local empty_square = config.empty_square or "□"
 	local filled_square = config.filled_square or "■"
-	local show_repo_name = config.show_repo_name or true
+
+	local show_repo_name = config.show_repo_name or false
+	local title = config.title or "repo_name"
+	local show_current_branch = config.show_current_branch or true
+	local use_current_branch = config.use_current_branch or true
+
+	if use_current_branch then
+		branch = GitHubAPI.get_current_branch()
+	end
 
 	local should_cache = config.should_cache or false
 	local cache_time = config.cache_time or 600
@@ -86,20 +96,31 @@ local function main(config)
 	local months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
 	local current_month = os.date("%m")
 
-	if show_repo_name then
+	-- if show_repo_name then
+	if title == "owner_with_repo_name" then
 		ascii_heatmap = ascii_heatmap .. repo .. "\n\n"
+	elseif title == "repo_name" then
+		-- extract repo name from owner/repo
+		local repo_name = repo:match("([^/]+)$")
+		ascii_heatmap = ascii_heatmap .. repo_name .. "\n\n"
+	else
+		ascii_heatmap = ascii_heatmap .. "\n\n"
 	end
 
 	if #gap == 1 then
+		ascii_heatmap = ascii_heatmap .. " "
 		for i = 1, current_month do
 			ascii_heatmap = ascii_heatmap .. "   " .. gap .. months[i] .. " "
 		end
-		ascii_heatmap = ascii_heatmap .. "   " .. gap
+
+		-- ascii_heatmap = ascii_heatmap .. "ooo" .. gap
 
 		-- if last week of the month add extra spacing
-		if #heatmap < weeks_in_year then
-			ascii_heatmap = ascii_heatmap .. "  "
-		end
+		-- if #heatmap < weeks_in_year then
+		-- 	ascii_heatmap = ascii_heatmap .. "EE"
+		-- end
+		ascii_heatmap = ascii_heatmap .. "\n"
+	else
 		ascii_heatmap = ascii_heatmap .. "\n"
 	end
 
@@ -121,6 +142,10 @@ local function main(config)
 		ascii_heatmap = ascii_heatmap .. "\n"
 	end
 
+	if show_current_branch then
+		ascii_heatmap = ascii_heatmap .. "\n" .. " " .. branch
+	end
+
 	-- create cache file for repo heatmap
 	if should_cache then
 		local directory_exists = vim.fn.isdirectory(cache_dir .. "/git-dashboard-nvim")
@@ -140,4 +165,4 @@ local function main(config)
 	return ascii_heatmap
 end
 
-return main
+return M

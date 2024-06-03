@@ -35,4 +35,15 @@ M.parse_date = function(date)
 	}
 end
 
+---@return {current_month: string, current_week: number, current_day_of_week: number, days_in_week: number, weeks_in_year: number}
+M.current_date_info = function()
+	return {
+		current_month = os.date("%m"),
+		current_week = tonumber(os.date("%U")),
+		current_day_of_week = tonumber(os.date("%w")),
+		days_in_week = 7,
+		weeks_in_year = 52,
+	}
+end
+
 return M

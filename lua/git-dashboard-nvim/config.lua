@@ -19,33 +19,37 @@ M = {}
 
 ---@type Config
 local defaults = {
-	fallback_header = "",
-	top_padding = 0,
-	bottom_padding = 0,
-	author = "",
-	branch = "main",
-	gap = " ",
-	day_label_gap = " ",
-	empty = " ",
-	empty_square = "□",
-	filled_square = "■",
-	title = "repo_name",
-	show_current_branch = true,
-	days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
-	months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" },
-	use_current_branch = true,
+  fallback_header = "",
+  top_padding = 0,
+  bottom_padding = 0,
+  author = "",
+  branch = "main",
+  gap = " ",
+  day_label_gap = " ",
+  empty = " ",
+  empty_square = "□",
+  filled_square = "■",
+  title = "repo_name",
+  show_current_branch = true,
+  days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
+  months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" },
+  use_current_branch = true,
 }
 
 ---@param config table
 M.set_config_defaults = function(config)
-	for k, v in pairs(defaults) do
-		if config[k] == nil then
-			config[k] = v
-		end
-	end
+  for k, v in pairs(defaults) do
+    if config[k] == nil then
+      config[k] = v
+    end
+  end
 
-	---@type Config
-	return config
+  ---@type Config
+  return config
+end
+
+M.get_config_defaults = function()
+  return defaults
 end
 
 return M

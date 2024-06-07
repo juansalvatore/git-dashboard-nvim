@@ -116,8 +116,7 @@ M.generate_ascii_heatmap = function(base_heatmap, config, repo_with_owner)
     vim.cmd('call matchadd("' .. highlight_group .. '",' .. '"' .. branch_label .. '")')
   end
 
-  -- get current theme colors
-
+  -- only affect the dashboard buffer with highlights
   vim.cmd("highlight DashboardHeader guifg=#7eac6f")
   vim.cmd("highlight EmptySquareHighlight guifg=#54734a")
   vim.cmd("highlight FilledSquareHighlight guifg=#AFD2A3")

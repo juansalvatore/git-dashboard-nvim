@@ -1,6 +1,6 @@
-M = {}
+Utils = {}
 
-M.create_dashboard_update_on_shell_cmd = function()
+Utils.create_dashboard_update_on_shell_cmd = function()
   -- create an autocommand on BufWritePost when a command is ran using :! to call the dashboard redraw from require('dashboard')
   vim.api.nvim_create_autocmd({ "ShellCmdPost" }, {
     callback = function()
@@ -21,7 +21,7 @@ M.create_dashboard_update_on_shell_cmd = function()
   })
 end
 
-M.parse_date = function(date)
+Utils.parse_date = function(date)
   local year, month, day = date:match("(%d+)-(%d+)-(%d+)")
   local week = os.date("%U", os.time({ year = year, month = month, day = day }))
   local day_of_week = os.date("%w", os.time({ year = year, month = month, day = day }))
@@ -36,7 +36,7 @@ M.parse_date = function(date)
 end
 
 ---@return {current_month: string, current_week: number, current_day_of_week: number, days_in_week: number, weeks_in_year: number}
-M.current_date_info = function()
+Utils.current_date_info = function()
   return {
     current_month = os.date("%m"),
     current_week = tonumber(os.date("%U")),
@@ -46,4 +46,4 @@ M.current_date_info = function()
   }
 end
 
-return M
+return Utils

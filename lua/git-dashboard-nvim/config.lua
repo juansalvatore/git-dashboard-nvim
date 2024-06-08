@@ -1,4 +1,4 @@
-M = {}
+Config = {}
 
 ---@class Config
 ---@field fallback_header string
@@ -37,7 +37,7 @@ local defaults = {
 }
 
 ---@param config table
-M.set_config_defaults = function(config)
+Config.set_config_defaults = function(config)
   for k, v in pairs(defaults) do
     if config[k] == nil then
       config[k] = v
@@ -48,8 +48,8 @@ M.set_config_defaults = function(config)
   return config
 end
 
-M.get_config_defaults = function()
+Config.get_config_defaults = function()
   return defaults
 end
 
-return M
+return Config

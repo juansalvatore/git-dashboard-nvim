@@ -19,6 +19,8 @@ describe("heatmap", function()
       { day = 29, day_of_week = 3, month = 5, week = 21, year = 2024 },
       { day = 29, day_of_week = 3, month = 5, week = 21, year = 2024 },
       { day = 29, day_of_week = 3, month = 5, week = 21, year = 2024 },
+      { day = 29, day_of_week = 3, month = 5, week = 21, year = 2024 },
+      { day = 29, day_of_week = 3, month = 5, week = 21, year = 2024 },
     }
 
     local ascii_heatmap = heatmap.generate_base_heatmap(dates)
@@ -44,8 +46,9 @@ describe("heatmap", function()
       { 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0 },
       { 0, 0, 0, 0, 0, 0, 0 },
-      { 0, 0, 0, 3, 0, 0, 1 },
+      { 0, 0, 0, 5, 0, 0, 1 },
       { 5, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
     })
   end)
 

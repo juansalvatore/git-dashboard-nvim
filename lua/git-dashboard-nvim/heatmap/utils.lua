@@ -67,12 +67,6 @@ HeatmapUtils.generate_ascii_heatmap = function(base_heatmap, config, repo_with_o
       ascii_heatmap = ascii_heatmap .. "   " .. config.gap .. config.months[i] .. " "
     end
 
-    -- ascii_heatmap = ascii_heatmap .. "ooo" .. gap
-
-    -- if last week of the month add extra spacing
-    -- if #heatmap < weeks_in_year then
-    -- 	ascii_heatmap = ascii_heatmap .. "EE"
-    -- end
     ascii_heatmap = ascii_heatmap .. "\n"
   else
     ascii_heatmap = ascii_heatmap .. "\n"

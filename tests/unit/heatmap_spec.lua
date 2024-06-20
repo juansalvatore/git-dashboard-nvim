@@ -1,5 +1,15 @@
 local config = require("git-dashboard-nvim.config")
+
+---@diagnostic disable-next-line: undefined-field
 local eq = assert.are.same
+
+local date_info = {
+  current_day_of_week = 4,
+  current_month = "06",
+  current_week = 24,
+  days_in_week = 7,
+  weeks_in_year = 52,
+}
 
 describe("heatmap", function()
   it("create base heatmap", function()
@@ -23,7 +33,7 @@ describe("heatmap", function()
       { day = 29, day_of_week = 3, month = 5, week = 21, year = 2024 },
     }
 
-    local ascii_heatmap = heatmap.generate_base_heatmap(dates)
+    local ascii_heatmap = heatmap.generate_base_heatmap(dates, date_info)
 
     eq(ascii_heatmap, {
       { 0, 0, 0, 0, 0, 0, 0 },
@@ -84,7 +94,7 @@ describe("heatmap", function()
     local repo_with_owner = "owner/repo"
 
     local ascii_heatmap =
-      heatmap.generate_ascii_heatmap(base_heatmap, config_defaults, repo_with_owner)
+      heatmap.generate_ascii_heatmap(base_heatmap, config_defaults, repo_with_owner, date_info)
 
     eq(
       ascii_heatmap,

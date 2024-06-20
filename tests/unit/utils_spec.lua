@@ -1,3 +1,4 @@
+---@diagnostic disable-next-line: undefined-field
 local eq = assert.are.same
 
 describe("utils", function()

@@ -1,20 +1,17 @@
-local utils = require("git-dashboard-nvim.utils")
-
 HeatmapUtils = {}
 
-HeatmapUtils.generate_base_heatmap = function(dates)
+HeatmapUtils.generate_base_heatmap = function(dates, current_date_info)
   local heatmap = {}
-  local date_info = utils.current_date_info()
 
   -- create base heatmap
-  for i = 1, date_info.weeks_in_year do
+  for i = 1, current_date_info.weeks_in_year do
     heatmap[i] = {}
 
-    for j = 1, date_info.days_in_week do
+    for j = 1, current_date_info.days_in_week do
       heatmap[i][j] = 0
     end
 
-    if i == date_info.current_week then
+    if i == current_date_info.current_week then
       break
     end
   end
@@ -42,8 +39,12 @@ end
 ---@param config Config
 ---@param repo_with_owner string
 ---@return string
-HeatmapUtils.generate_ascii_heatmap = function(base_heatmap, config, repo_with_owner)
-  local date_info = utils.current_date_info()
+HeatmapUtils.generate_ascii_heatmap = function(
+  base_heatmap,
+  config,
+  repo_with_owner,
+  current_date_info
+)
   local ascii_heatmap = ""
 
   local title = ""
@@ -63,7 +64,7 @@ HeatmapUtils.generate_ascii_heatmap = function(base_heatmap, config, repo_with_o
 
   if #config.gap == 1 then
     ascii_heatmap = ascii_heatmap .. " "
-    for i = 1, date_info.current_month do
+    for i = 1, current_date_info.current_month do
       ascii_heatmap = ascii_heatmap .. "   " .. config.gap .. config.months[i] .. " "
     end
 
@@ -77,14 +78,15 @@ HeatmapUtils.generate_ascii_heatmap = function(base_heatmap, config, repo_with_o
 
   vim.cmd("highlight clear DashboardHeader")
 
-  for i = 1, date_info.days_in_week do
+  for i = 1, current_date_info.days_in_week do
     local highlight_group = "DayHighlight" .. i
     ascii_heatmap = ascii_heatmap .. config.days[i] .. config.day_label_gap
     vim.cmd('call matchadd("' .. highlight_group .. '", "' .. config.days[i] .. '")')
 
     for j = 1, #base_heatmap do
       if
-        j == tonumber(date_info.current_week) and i > tonumber(date_info.current_day_of_week) + 1
+        j == tonumber(current_date_info.current_week)
+        and i > tonumber(current_date_info.current_day_of_week) + 1
       then
         highlight_group = "EmptySquareHighlight"
         vim.cmd("call matchadd('" .. highlight_group .. "', '" .. config.empty_square .. "')")

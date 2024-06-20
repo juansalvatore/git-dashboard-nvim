@@ -1,5 +1,6 @@
 local Git = require("git-dashboard-nvim.git")
 local HeatmapUtils = require("git-dashboard-nvim.heatmap.utils")
+local utils = require("git-dashboard-nvim.utils")
 
 Heatmap = {}
 
@@ -23,9 +24,12 @@ Heatmap.generate_heatmap = function(config)
     return ""
   end
 
-  local base_heatmap = HeatmapUtils.generate_base_heatmap(commits)
+  local current_date_info = utils.current_date_info()
 
-  local ascii_heatmap = HeatmapUtils.generate_ascii_heatmap(base_heatmap, config, repo_with_owner)
+  local base_heatmap = HeatmapUtils.generate_base_heatmap(commits, current_date_info)
+
+  local ascii_heatmap =
+    HeatmapUtils.generate_ascii_heatmap(base_heatmap, config, repo_with_owner, current_date_info)
   return ascii_heatmap
 end
 

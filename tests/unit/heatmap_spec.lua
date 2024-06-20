@@ -113,4 +113,123 @@ Sat □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
 ]]
     )
   end)
+
+  it("handles leap year", function()
+    local heatmap = require("git-dashboard-nvim.heatmap.utils")
+    local dates = {
+      -- February 29th of a leap year
+      { day = 29, day_of_week = 5, month = 2, week = 9, year = 2024 },
+    }
+
+    local ascii_heatmap = heatmap.generate_base_heatmap(dates, date_info)
+
+    eq(ascii_heatmap, {
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 1, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+    })
+  end)
+
+  --@todo: Fix this test
+  it("handles year transition", function()
+    local heatmap = require("git-dashboard-nvim.heatmap.utils")
+    local dates = {
+      -- End of the year
+      { day = 31, day_of_week = 6, month = 12, week = 52, year = 2023 },
+
+      -- Start of the next year
+      { day = 1, day_of_week = 0, month = 1, week = 1, year = 2024 },
+    }
+
+    local ascii_heatmap = heatmap.generate_base_heatmap(dates, date_info)
+
+    eq(ascii_heatmap, {
+      { 1, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      [52] = {
+        [7] = 1,
+      },
+    })
+  end)
+
+  it("handles large number of commits in one day", function()
+    local heatmap = require("git-dashboard-nvim.heatmap.utils")
+    local dates = {}
+
+    for _ = 1, 100 do
+      table.insert(dates, { day = 15, day_of_week = 2, month = 3, week = 11, year = 2024 })
+    end
+
+    local ascii_heatmap = heatmap.generate_base_heatmap(dates, date_info)
+
+    eq(ascii_heatmap, {
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 100, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+      { 0, 0, 0, 0, 0, 0, 0 },
+    })
+  end)
 end)

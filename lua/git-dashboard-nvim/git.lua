@@ -2,6 +2,7 @@ local utils = require("git-dashboard-nvim.utils")
 
 Git = {}
 
+---@return string
 Git.get_repo_with_owner = function()
   local handle = io.popen("git remote get-url origin 2>/dev/null")
   if not handle then
@@ -24,6 +25,9 @@ Git.get_repo_with_owner = function()
   return ""
 end
 
+---@param username string
+---@param _branch string
+---@return table
 Git.get_commit_dates = function(username, _branch)
   local commits = {}
 
@@ -65,8 +69,7 @@ Git.get_commit_dates = function(username, _branch)
   return commits
 end
 
-P(Git.get_commit_dates("Juan Salvatore", "main"))
-
+---@return string
 Git.get_current_branch = function()
   local handle = io.popen("git branch --show-current 2>/dev/null")
   if not handle then

@@ -21,6 +21,8 @@ Utils.create_dashboard_update_on_shell_cmd = function()
   })
 end
 
+---@param date string
+---@return {year: number, month: number, day: number, week: number, day_of_week: number}
 Utils.parse_date = function(date)
   local year, month, day = date:match("(%d+)-(%d+)-(%d+)")
   local week = os.date("%U", os.time({ year = year, month = month, day = day }))

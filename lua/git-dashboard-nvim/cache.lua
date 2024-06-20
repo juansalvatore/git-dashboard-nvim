@@ -1,5 +1,9 @@
 M = {}
 
+---@param repo string
+---@param should_cache boolean
+---@param cache_time number
+---@return string
 M.create_cache = function(repo, should_cache, cache_time)
   -- if cache file exists, print it and return
   local cache_dir = vim.fn.stdpath("cache")
@@ -20,8 +24,14 @@ M.create_cache = function(repo, should_cache, cache_time)
       return ascii_heatmap
     end
   end
+
+  return ""
 end
 
+---@param ascii_heatmap string
+---@param should_cache boolean
+---@param cache_dir string
+---@param heatmap_cache string
 M.write_cache = function(ascii_heatmap, should_cache, cache_dir, heatmap_cache)
   -- create cache file for repo heatmap
   if should_cache then

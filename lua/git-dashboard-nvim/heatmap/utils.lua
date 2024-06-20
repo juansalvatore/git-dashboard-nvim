@@ -1,5 +1,8 @@
 HeatmapUtils = {}
 
+---@param dates table
+---@param current_date_info table
+---@return number[][]
 HeatmapUtils.generate_base_heatmap = function(dates, current_date_info)
   local heatmap = {}
 
@@ -118,6 +121,13 @@ HeatmapUtils.generate_ascii_heatmap = function(
   vim.cmd("highlight FilledSquareHighlight guifg=#AFD2A3")
   vim.cmd("highlight BranchHighlight guifg=#8DC07C")
   vim.cmd("highlight DashboardTitle guifg=#a3cc96")
+
+  -- on dashboard buffer leave remove all the above highlights
+  vim.cmd.autocmd(
+    "BufLeave",
+    "*",
+    "highlight clear DashboardHeader | highlight clear EmptySquareHighlight | highlight clear FilledSquareHighlight | highlight clear BranchHighlight | highlight clear DashboardTitle"
+  )
 
   return ascii_heatmap
 end

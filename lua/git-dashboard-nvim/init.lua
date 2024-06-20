@@ -5,6 +5,7 @@ local config_utils = require("git-dashboard-nvim.config")
 M = {}
 
 ---@param config Config
+---@return string[]
 M.setup = function(config)
   config = config_utils.set_config_defaults(config)
 

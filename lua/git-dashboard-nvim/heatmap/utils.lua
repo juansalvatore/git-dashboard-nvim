@@ -115,12 +115,11 @@ HeatmapUtils.generate_ascii_heatmap = function(
     vim.cmd('call matchadd("' .. highlight_group .. '",' .. '"' .. branch_label .. '")')
   end
 
-  -- only affect the dashboard buffer with highlights
-  vim.cmd("highlight DashboardHeader guifg=#7eac6f")
-  vim.cmd("highlight EmptySquareHighlight guifg=#54734a")
-  vim.cmd("highlight FilledSquareHighlight guifg=#AFD2A3")
-  vim.cmd("highlight BranchHighlight guifg=#8DC07C")
-  vim.cmd("highlight DashboardTitle guifg=#a3cc96")
+  vim.cmd("highlight DashboardHeader guifg=" .. config.colors.days_and_months_labels)
+  vim.cmd("highlight EmptySquareHighlight guifg=" .. config.colors.empty_square_highlight)
+  vim.cmd("highlight FilledSquareHighlight guifg=" .. config.colors.filled_square_highlight)
+  vim.cmd("highlight BranchHighlight guifg=" .. config.colors.branch_highlight)
+  vim.cmd("highlight DashboardTitle guifg=" .. config.colors.dashboard_title)
 
   -- on dashboard buffer leave remove all the above highlights
   vim.cmd.autocmd(

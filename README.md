@@ -119,9 +119,9 @@ This is the default config, feel free to change things around (some things like 
 
 ## ⇁ Contribution
 This project open source, so feel free to fork if you want very specific functionality. If you wish to
-contribute start with an issue and I am totally willing for PRs, as long as your PR leaves the default look 
+contribute I am totally willing for PRs, as long as your PR leaves the default look 
 and functionality intact I will accept features that build on top or improve things.
-I tarted using nvim around two months ago along with lua, so this is a project I mainly built for myself and to learn a bit more about lua and nvim,
+I started using nvim around two months ago along with lua, so this is a project I mainly built for myself and to learn a bit more about lua and nvim,
 but given that I think someone else may enjoy having this as their dashboard I decided to make it open source.
 
 **Tests**

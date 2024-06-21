@@ -74,7 +74,7 @@ This is the default config, feel free to change things around (some things like 
         empty = ' ',
         empty_square = '□',
         filled_square = '■',
-        title = 'repo_name',
+        title = 'repo_name', -- "owner_with_repo_name" | "repo_name" | "none"
         show_current_branch = true,
         days = { 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' },
         months = { 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' },

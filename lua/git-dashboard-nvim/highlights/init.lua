@@ -51,6 +51,9 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
     )
   end
 
+  -- add highlight to match any number
+  vim.cmd("call matchadd('MonthHighlight', '\\d\\+')")
+
   -- on dashboard buffer leave remove all the above highlights
   vim.cmd.autocmd(
     "BufLeave",

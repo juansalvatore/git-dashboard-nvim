@@ -51,7 +51,11 @@ HeatmapUtils.generate_ascii_heatmap = function(
   current_date_info
 )
   local ascii_heatmap = ""
-  local branch_label = " " .. config.branch
+
+  local branch_label = config.branch
+  if vim.g.have_nerd_font == true then
+    branch_label = " " .. config.branch
+  end
 
   local title = ""
   if config.title == "owner_with_repo_name" then
@@ -69,34 +73,81 @@ HeatmapUtils.generate_ascii_heatmap = function(
   -- add highlights to the heatmap based on the config settings
   Highlights.add_highlights(config, current_date_info, branch_label, title)
 
-  if #config.gap == 1 then
-    ascii_heatmap = ascii_heatmap .. " "
-    for i = 1, current_date_info.current_month do
-      ascii_heatmap = ascii_heatmap .. "   " .. config.gap .. config.months[i] .. " "
+  -- horizontal heatmap
+  if config.is_horizontal then
+    -- add month labels
+    if #config.gap == 1 then
+      ascii_heatmap = ascii_heatmap .. " "
+      for i = 1, current_date_info.current_month do
+        ascii_heatmap = ascii_heatmap .. "   " .. config.gap .. config.months[i] .. " "
+      end
+
+      ascii_heatmap = ascii_heatmap .. "\n"
+    else
+      ascii_heatmap = ascii_heatmap .. "\n"
     end
 
-    ascii_heatmap = ascii_heatmap .. "\n"
+    -- add day labels and generate heatmap
+    for i = 1, current_date_info.days_in_week do
+      ascii_heatmap = ascii_heatmap .. config.days[i] .. config.day_label_gap
+
+      for j = 1, #base_heatmap do
+        if
+          j == tonumber(current_date_info.current_week)
+          and i > tonumber(current_date_info.current_day_of_week) + 1
+        then
+          ascii_heatmap = ascii_heatmap .. config.empty .. config.gap
+        elseif base_heatmap[j][i] > 0 then
+          ascii_heatmap = ascii_heatmap .. config.filled_square .. config.gap
+        else
+          ascii_heatmap = ascii_heatmap .. config.empty_square .. config.gap
+        end
+      end
+
+      ascii_heatmap = ascii_heatmap .. "\n"
+    end
   else
-    ascii_heatmap = ascii_heatmap .. "\n"
-  end
+    -- generate vertical heatmap instead of horizontal
+    for _i = 1, #base_heatmap do
+      local i = #base_heatmap - _i + 1 -- reverse the order
+      local row = base_heatmap[i]
+      local sum = 0
+      for _, value in ipairs(row) do
+        sum = sum + value
+      end
 
-  for i = 1, current_date_info.days_in_week do
-    ascii_heatmap = ascii_heatmap .. config.days[i] .. config.day_label_gap
+      for j = 1, current_date_info.days_in_week do
+        if
+          i == tonumber(current_date_info.current_week)
+          and j > tonumber(current_date_info.current_day_of_week) + 1
+        then
+          ascii_heatmap = ascii_heatmap .. config.empty .. config.gap
+        elseif base_heatmap[i][j] > 0 then
+          ascii_heatmap = ascii_heatmap .. config.filled_square .. config.gap -- filled square
+        else
+          if sum ~= 0 then
+            ascii_heatmap = ascii_heatmap .. config.empty_square .. config.gap
+          end
+        end
+      end
 
-    for j = 1, #base_heatmap do
-      if
-        j == tonumber(current_date_info.current_week)
-        and i > tonumber(current_date_info.current_day_of_week) + 1
-      then
-        ascii_heatmap = ascii_heatmap .. config.empty .. config.gap
-      elseif base_heatmap[j][i] > 0 then
-        ascii_heatmap = ascii_heatmap .. config.filled_square .. config.gap
-      else
-        ascii_heatmap = ascii_heatmap .. config.empty_square .. config.gap
+      -- if no commits in the heatmap row, then skip
+      if sum ~= 0 then
+        local sum_str = tostring(sum)
+
+        if config.show_contributions_count == true then
+          -- add padding to the sum string to align the heatmap (works up to 999 commits)
+          if sum < 10 then
+            sum_str = sum_str .. "  "
+          elseif sum < 100 then
+            sum_str = sum_str .. " "
+          end
+
+          ascii_heatmap = ascii_heatmap .. " " .. sum_str .. " "
+        end
+        ascii_heatmap = ascii_heatmap .. "\n"
       end
     end
-
-    ascii_heatmap = ascii_heatmap .. "\n"
   end
 
   if config.show_current_branch then

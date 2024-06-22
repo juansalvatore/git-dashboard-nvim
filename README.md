@@ -62,23 +62,24 @@ By default it tracks all commits, but you can specify an author to just track th
 This is the default config, feel free to change things around (some things like chaning months or day labels may look bad if more characters are added)
 ```lua
       local ascii_heatmap = require('git-dashboard-nvim').setup {
-        -- author = 'Juan Salvatore',
         branch = 'main',
-        gap = ' ',
+        use_current_branch = true, -- if false it will use the branch specified in the config
+        title = 'repo_name', -- "owner_with_repo_name" | "repo_name" | "none"
+        show_current_branch = true,
+        gap = ' ', -- gap between heatmap chart squares
         top_padding = 23,
         bottom_padding = 20,
         show_repo_name = true,
-        fallback_header = '',
+        fallback_header = '', -- if you are not on a git repo it will show this header
         author = '',
         day_label_gap = ' ',
-        empty = ' ',
+        empty = ' ', -- empty space character
         empty_square = '□',
         filled_square = '■',
-        title = 'repo_name', -- "owner_with_repo_name" | "repo_name" | "none"
-        show_current_branch = true,
+        is_horizontal = true,
+        show_contributions_count = true, -- (only for vertical heatmap)
         days = { 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' },
         months = { 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' },
-        use_current_branch = true,
         colors = {
           days_and_months_labels = '#7eac6f',
           empty_square_highlight = '#54734a',
@@ -103,11 +104,13 @@ This is the default config, feel free to change things around (some things like 
 ---@field top_padding number
 ---@field bottom_padding number
 ---@field author string
+---@field is_horizontal boolean
 ---@field branch string
 ---@field gap string
 ---@field day_label_gap string
 ---@field empty string
 ---@field empty_square string
+---@field show_contributions_count boolean
 ---@field filled_square string
 ---@field title "owner_with_repo_name" | "repo_name" | "none"
 ---@field show_current_branch boolean
@@ -115,6 +118,12 @@ This is the default config, feel free to change things around (some things like 
 ---@field months string[]
 ---@field use_current_branch boolean
 ---@field colors Colors
+```
+
+If you want to have an icons show (Eg. branch icon) install a nerd font and set
+the following global in your `init.lua`:
+```lua
+vim.g.have_nerd_font = true
 ```
 
 ## ⇁ Contribution

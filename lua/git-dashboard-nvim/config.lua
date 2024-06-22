@@ -12,11 +12,13 @@ Config = {}
 ---@field top_padding number
 ---@field bottom_padding number
 ---@field author string
+---@field is_horizontal boolean
 ---@field branch string
 ---@field gap string
 ---@field day_label_gap string
 ---@field empty string
 ---@field empty_square string
+---@field show_contributions_count boolean
 ---@field filled_square string
 ---@field title "owner_with_repo_name" | "repo_name" | "none"
 ---@field show_current_branch boolean
@@ -37,6 +39,8 @@ local defaults = {
   empty = " ",
   empty_square = "□",
   filled_square = "■",
+  is_horizontal = true,
+  show_contributions_count = true,
   title = "repo_name",
   show_current_branch = true,
   days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },

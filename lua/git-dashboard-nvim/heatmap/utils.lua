@@ -71,36 +71,64 @@ HeatmapUtils.generate_ascii_heatmap = function(
   end
 
   -- add highlights to the heatmap based on the config settings
-  Highlights.add_highlights(config, current_date_info, branch_label, title)
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "dashboard",
+    callback = function()
+      Highlights.add_highlights(config, current_date_info, branch_label, title)
+    end,
+  })
 
   -- horizontal heatmap
   if config.is_horizontal then
     -- add month labels
-    if #config.gap == 1 then
+    if #config.gap == 1 and config.show_only_weeks_with_commits == false then
       ascii_heatmap = ascii_heatmap .. " "
       for i = 1, current_date_info.current_month do
-        ascii_heatmap = ascii_heatmap .. "   " .. config.gap .. config.months[i] .. " "
+        local month = config.months[i]:sub(1, 3)
+        -- add padding so that the month is always 3 characters long
+        for _ = 1, 3 - #month do
+          month = month .. " "
+        end
+        ascii_heatmap = ascii_heatmap .. "   " .. config.gap .. month .. " "
       end
 
       ascii_heatmap = ascii_heatmap .. "\n"
     else
-      ascii_heatmap = ascii_heatmap .. "\n"
+      ascii_heatmap = "\n" .. ascii_heatmap
     end
 
     -- add day labels and generate heatmap
     for i = 1, current_date_info.days_in_week do
-      ascii_heatmap = ascii_heatmap .. config.days[i] .. config.day_label_gap
+      local day = config.days[i]:sub(1, 3)
+      for _ = 1, 3 - #day do
+        day = " " .. day
+      end
+
+      ascii_heatmap = ascii_heatmap .. day .. config.day_label_gap
 
       for j = 1, #base_heatmap do
+        local row = base_heatmap[j]
+        local sum = 0
+        for _, value in ipairs(row) do
+          sum = sum + value
+        end
+
         if
-          j == tonumber(current_date_info.current_week)
-          and i > tonumber(current_date_info.current_day_of_week) + 1
+          config.show_only_weeks_with_commits == false
+          or config.show_only_weeks_with_commits == true and sum ~= 0
         then
-          ascii_heatmap = ascii_heatmap .. config.empty .. config.gap
-        elseif base_heatmap[j][i] > 0 then
-          ascii_heatmap = ascii_heatmap .. config.filled_square .. config.gap
-        else
-          ascii_heatmap = ascii_heatmap .. config.empty_square .. config.gap
+          if
+            j == tonumber(current_date_info.current_week)
+            and i > tonumber(current_date_info.current_day_of_week) + 1
+          then
+            ascii_heatmap = ascii_heatmap .. config.empty .. config.gap
+          elseif base_heatmap[j][i] > 0 then
+            ascii_heatmap = ascii_heatmap
+              .. config.filled_squares[base_heatmap[j][i] > 6 and 6 or base_heatmap[j][i]]
+              .. config.gap
+          else
+            ascii_heatmap = ascii_heatmap .. config.empty_square .. config.gap
+          end
         end
       end
 
@@ -123,7 +151,9 @@ HeatmapUtils.generate_ascii_heatmap = function(
         then
           ascii_heatmap = ascii_heatmap .. config.empty .. config.gap
         elseif base_heatmap[i][j] > 0 then
-          ascii_heatmap = ascii_heatmap .. config.filled_square .. config.gap -- filled square
+          ascii_heatmap = ascii_heatmap
+            .. config.filled_squares[base_heatmap[j][i] > 6 and 6 or base_heatmap[j][i]]
+            .. config.gap
         else
           if sum ~= 0 then
             ascii_heatmap = ascii_heatmap .. config.empty_square .. config.gap

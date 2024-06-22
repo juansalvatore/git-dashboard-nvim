@@ -3,7 +3,7 @@ Config = {}
 ---@class Colors
 ---@field days_and_months_labels string
 ---@field empty_square_highlight string
----@field filled_square_highlight string
+---@field filled_square_highlights string[]
 ---@field branch_highlight string
 ---@field dashboard_title string
 
@@ -19,7 +19,8 @@ Config = {}
 ---@field empty string
 ---@field empty_square string
 ---@field show_contributions_count boolean
----@field filled_square string
+---@field show_only_weeks_with_commits boolean
+---@field filled_squares string[]
 ---@field title "owner_with_repo_name" | "repo_name" | "none"
 ---@field show_current_branch boolean
 ---@field days string[]
@@ -34,13 +35,15 @@ local defaults = {
   bottom_padding = 0,
   author = "",
   branch = "main",
-  gap = " ",
-  day_label_gap = " ",
-  empty = " ",
+  gap = " ",
+  day_label_gap = " ",
+  empty = " ",
   empty_square = "□",
-  filled_square = "■",
+  -- filled_squares = { "", "", "", "", "", "" },
+  filled_squares = { "■", "■", "■", "■", "■", "■" },
   is_horizontal = true,
   show_contributions_count = true,
+  show_only_weeks_with_commits = false,
   title = "repo_name",
   show_current_branch = true,
   days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
@@ -49,7 +52,7 @@ local defaults = {
   colors = {
     days_and_months_labels = "#7eac6f",
     empty_square_highlight = "#54734a",
-    filled_square_highlight = "#AFD2A3",
+    filled_square_highlights = { "#2a3925", "#54734a", "#7eac6f", "#98c689", "#afd2a3", "#bad9b0" },
     branch_highlight = "#8DC07C",
     dashboard_title = "#a3cc96",
   },
@@ -57,14 +60,7 @@ local defaults = {
 
 ---@param config table
 Config.set_config_defaults = function(config)
-  for k, v in pairs(defaults) do
-    if config[k] == nil then
-      config[k] = v
-    end
-  end
-
-  ---@type Config
-  return config
+  return vim.tbl_deep_extend("force", defaults, config)
 end
 
 Config.get_config_defaults = function()

@@ -87,7 +87,7 @@ HeatmapUtils.generate_ascii_heatmap = function(
   -- horizontal heatmap
   if config.is_horizontal then
     -- add month labels
-    if #config.gap == 1 and config.show_only_weeks_with_commits == false then
+    if config.gap == " " and config.show_only_weeks_with_commits == false then
       ascii_heatmap = ascii_heatmap .. " "
       for i = 1, current_date_info.current_month do
         local month = config.months[i]:sub(1, 3)

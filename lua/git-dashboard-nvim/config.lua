@@ -17,6 +17,7 @@ Config = {}
 ---@field gap string
 ---@field day_label_gap string
 ---@field empty string
+---@field hide_cursor boolean
 ---@field empty_square string
 ---@field show_contributions_count boolean
 ---@field show_only_weeks_with_commits boolean
@@ -41,6 +42,7 @@ local defaults = {
   empty_square = "□",
   -- filled_squares = { "", "", "", "", "", "" },
   filled_squares = { "■", "■", "■", "■", "■", "■" },
+  hide_cursor = true,
   is_horizontal = true,
   show_contributions_count = true,
   show_only_weeks_with_commits = false,

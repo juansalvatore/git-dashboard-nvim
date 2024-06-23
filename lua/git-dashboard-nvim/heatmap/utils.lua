@@ -75,6 +75,12 @@ HeatmapUtils.generate_ascii_heatmap = function(
     pattern = "dashboard",
     callback = function()
       Highlights.add_highlights(config, current_date_info, branch_label, title)
+
+      -- hide cursor
+      if config.hide_cursor == true then
+        vim.api.nvim_command("hi Cursor blend=100")
+        vim.api.nvim_command("set guicursor+=a:Cursor/lCursor")
+      end
     end,
   })
 
@@ -152,10 +158,10 @@ HeatmapUtils.generate_ascii_heatmap = function(
           ascii_heatmap = ascii_heatmap .. config.empty .. config.gap
         elseif base_heatmap[i][j] > 0 then
           ascii_heatmap = ascii_heatmap
-            .. config.filled_squares[base_heatmap[j][i] > 6 and 6 or base_heatmap[j][i]]
+            .. config.filled_squares[base_heatmap[i][j] > 6 and 6 or base_heatmap[i][j]]
             .. config.gap
         else
-          if sum ~= 0 then
+          if sum ~= 0 or config.show_only_weeks_with_commits == false then
             ascii_heatmap = ascii_heatmap .. config.empty_square .. config.gap
           end
         end
@@ -175,6 +181,9 @@ HeatmapUtils.generate_ascii_heatmap = function(
 
           ascii_heatmap = ascii_heatmap .. " " .. sum_str .. " "
         end
+      end
+
+      if sum ~= 0 or config.show_only_weeks_with_commits == false then
         ascii_heatmap = ascii_heatmap .. "\n"
       end
     end
@@ -183,6 +192,13 @@ HeatmapUtils.generate_ascii_heatmap = function(
   if config.show_current_branch then
     ascii_heatmap = ascii_heatmap .. "\n" .. branch_label .. "\n"
   end
+
+  -- center vertically ascii heatmap
+  local lines = vim.api.nvim_get_option("lines")
+  local ascii_heatmap_lines = vim.split(ascii_heatmap, "\n")
+  local ascii_heatmap_lines_count = #ascii_heatmap_lines
+  local padding = math.floor((lines - ascii_heatmap_lines_count) / 2)
+  ascii_heatmap = string.rep("\n", padding) .. ascii_heatmap
 
   return ascii_heatmap
 end

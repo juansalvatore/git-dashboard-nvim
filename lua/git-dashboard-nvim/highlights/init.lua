@@ -6,7 +6,6 @@ Highlights = {}
 Highlights._add_highlight_group = function(group_name, match, fg_color)
   vim.cmd("highlight " .. group_name .. " guifg=" .. fg_color)
   vim.cmd('call matchadd("' .. group_name .. '", "' .. match .. '")')
-  -- only apply highlights to the buffer "dashboard", so that it doesn't affect other buffers
 end
 
 ---@param config Config
@@ -20,15 +19,16 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
   -- clear dashboard header existing highlights
   vim.cmd("highlight clear DashboardHeader")
 
+  -- Add highlights for DashboardHeader section
   Highlights._add_highlight_group(
-    "EmptySquareHighlight",
+    "DashboardHeaderEmptySquare",
     config.empty_square,
     config.colors.empty_square_highlight
   )
 
   for i = 1, #config.days do
     Highlights._add_highlight_group(
-      "DayHighlight",
+      "DashboardHeaderDay" .. i,
       config.days[i]:sub(1, 3),
       config.colors.days_and_months_labels
     )
@@ -36,7 +36,7 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
 
   for i = 1, current_date_info.current_month do
     Highlights._add_highlight_group(
-      "MonthHighlight",
+      "DashboardHeaderMonth" .. i,
       config.months[i]:sub(1, 3),
       config.colors.days_and_months_labels
     )
@@ -44,24 +44,24 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
 
   for i = 1, #config.filled_squares do
     Highlights._add_highlight_group(
-      "FilledSquareHighlight" .. i,
+      "DashboardHeaderFilledSquare" .. i,
       config.filled_squares[i],
       config.colors.filled_square_highlights[i]
     )
   end
 
   -- add highlight to match any number
-  vim.cmd("call matchadd('MonthHighlight', '\\d\\+')")
+  vim.cmd("call matchadd('DashboardHeaderMonthHighlight', '\\d\\+')")
 
-  Highlights._add_highlight_group("DashboardTitle", title, config.colors.dashboard_title)
+  Highlights._add_highlight_group("DashboardHeaderTitle", title, config.colors.dashboard_title)
 
-  Highlights._add_highlight_group("BranchHighlight", branch_label, config.colors.branch_highlight)
-
-  vim.cmd.autocmd(
-    "BufLeave",
-    "*",
-    "highlight clear DashboardHeader | highlight clear EmptySquareHighlight | highlight clear FilledSquareHighlight | highlight clear BranchHighlight | highlight clear DashboardTitle | highlight clear DayHighlight | highlight clear MonthHighlight"
+  Highlights._add_highlight_group(
+    "DashboardHeaderBranch",
+    branch_label,
+    config.colors.branch_highlight
   )
+
+  vim.cmd.autocmd("BufLeave", "*", "highlight clear DashboardHeader*")
 
   -- set cursor color to white when leaving the buffer
   vim.cmd.autocmd("BufLeave", "*", "highlight Cursor blend=0")

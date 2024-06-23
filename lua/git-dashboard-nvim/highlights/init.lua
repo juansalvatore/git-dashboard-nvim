@@ -61,8 +61,6 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
     config.colors.branch_highlight
   )
 
-  vim.cmd.autocmd("BufLeave", "*", "highlight clear DashboardHeader*")
-
   -- set cursor color to white when leaving the buffer
   vim.cmd.autocmd("BufLeave", "*", "highlight Cursor blend=0")
   vim.cmd.autocmd("BufLeave", "*", "set guicursor+=a:Cursor/lCursor")

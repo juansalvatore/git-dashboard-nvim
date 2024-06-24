@@ -21,9 +21,9 @@
 
 
 ## ⇁ Intro
-`git-dashboard-nvim` is a modular solution to displaying your git commit contributions as an nvim heatmap dashboard.
+`git-dashboard-nvim` is a modular solution to display your git commit contributions as an nvim heatmap dashboard that adapts to the current branch and repository.
 It uses [vimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim) as the base for the dashboard and this plugin generates the header dynamically that we can pass to dashboard-nvim. 
-This plugin allows you to track project based progress in a visual way, making your nvim dashboard look cool while still being useful by showcasing the current git branch and project.
+It allows you to track project based progress in a visual way, making your nvim dashboard look cool while still being useful by showcasing the current git branch and project.
 I've mainly developed this plugin for myself, so to make sure it looks well for you, check the [Style Variations](#-Style-Variations) section, to see some fun styling configurations.
 
 
@@ -158,6 +158,8 @@ vim.g.have_nerd_font = true
 ```
 
 ## ⇁ Style Variations
+These are some suggested styles and dashboard variations.
+If you decide to create your own feel free to commit your config with a screen capture and code!
 
 ### Default
 <img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/41c62850-b559-40cb-af68-235e2e938157">

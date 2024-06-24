@@ -1,3 +1,20 @@
+--[[
+
+  This file contains functions to create and write cache files for the heatmap
+  of a repository. The cache file is created in the cache directory of the
+  current neovim instance. The cache file is named as gh-heatmap-<repo>.txt
+  where <repo> is the repository name with '/' replaced by '-'.
+
+  The cache file is created only if the cache file does not exist or if the
+  cache file is older than 10 minutes. The cache file is read if it exists and
+  is not older than 10 minutes.
+
+  This logic is not being used as with the current implementation of the git
+  helpers the heatmap is created very fast and does not require caching.
+
+]]
+--
+
 M = {}
 
 ---@param repo string

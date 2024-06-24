@@ -15,6 +15,7 @@
 * [Installation](#-Installation)
 * [Getting Started](#-Getting-Started)
 * [Config](#-Config)
+* [Style Variations](#-Style-Variations)
 * [Contribution](#-Contribution)
 * [Social](#-Social)
 

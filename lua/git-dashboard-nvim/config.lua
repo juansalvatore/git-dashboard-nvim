@@ -11,7 +11,8 @@ Config = {}
 ---@field fallback_header string
 ---@field top_padding number
 ---@field bottom_padding number
----@field author string|nil filter commits base on commit author, empty string disables filter, nil defaults to git config user.name
+---@field use_git_username_as_author boolean
+---@field author string ignored if use_git_username_as_author is true
 ---@field is_horizontal boolean
 ---@field branch string
 ---@field centered boolean
@@ -36,6 +37,7 @@ local defaults = {
   fallback_header = "",
   top_padding = 0,
   bottom_padding = 0,
+  use_git_username_as_author = false,
   author = "",
   branch = "main",
   gap = " ",
@@ -68,7 +70,8 @@ local current_config = defaults
 
 ---@param config table
 Config.set_config_defaults = function(config)
-  return vim.tbl_deep_extend("force", current_config, config)
+  current_config = vim.tbl_deep_extend("force", current_config, config)
+  return current_config
 end
 
 Config.get_config_defaults = function()

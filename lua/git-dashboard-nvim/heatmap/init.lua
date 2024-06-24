@@ -18,8 +18,12 @@ Heatmap.generate_heatmap = function(config)
     return ""
   end
 
-  local username = Git.get_username()
-  local commits = Git.get_commit_dates(config.author or username, config.branch)
+  local author = config.author
+  if config.use_git_username_as_author then
+    author = Git.get_username()
+  end
+
+  local commits = Git.get_commit_dates(author, config.branch)
 
   if #commits == 0 then
     return ""

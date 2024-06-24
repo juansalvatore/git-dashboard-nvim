@@ -4,10 +4,10 @@ local config_utils = require("git-dashboard-nvim.config")
 
 M = {}
 
----@param config Config
+---@param config? Config
 ---@return string[]
 M.setup = function(config)
-  config = config_utils.set_config_defaults(config)
+  config = config_utils.set_config_defaults(config or {})
 
   utils.create_dashboard_update_on_shell_cmd()
 

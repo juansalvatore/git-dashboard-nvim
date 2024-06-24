@@ -47,6 +47,12 @@ I've mainly developed this plugin for myself, so to make sure it looks well for 
         theme = 'doom',
         config = {
           header = git_dashboard,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
         },
       }
 

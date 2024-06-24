@@ -1,4 +1,5 @@
 local utils = require("git-dashboard-nvim.utils")
+local config = require("git-dashboard-nvim.config")
 
 Git = {}
 
@@ -12,17 +13,35 @@ Git.get_repo_with_owner = function()
   local remote_url = handle:read("*a")
   handle:close()
 
-  if remote_url and remote_url ~= "" then
-    remote_url = remote_url:gsub("%s+", "") -- Remove any trailing newlines or spaces
-
-    local name_with_owner = remote_url:match("github%.com[:/]([^/]+/[^/.]+)%.git")
-      or remote_url:match("github%.com[:/]([^/]+/[^/.]+)")
-    if name_with_owner then
-      return name_with_owner
-    end
+  if not remote_url or remote_url == "" then
+    return ""
   end
 
-  return ""
+  remote_url = remote_url:gsub("%s+", "") -- Remove any trailing newlines or spaces
+
+  return Git._parse_repo_and_owner(remote_url)
+end
+
+Git._parse_repo_and_owner = function(remote_url)
+  return remote_url:match(".*%..*[:/]([^/]+/[^/.]+)")
+    or remote_url:match(".*%..*[:/]([^/]+/[^/.]+).git")
+    or ""
+end
+
+Git.get_username = function()
+  local handle = io.popen("git config user.name")
+  if not handle then
+    return ""
+  end
+
+  local username = handle:read("*a")
+  return utils.trim(username)
+end
+
+---@param revision string
+Git._revision_exists_origin = function(revision)
+  local exitcode = os.execute("git show-ref --verify --quiet refs/remotes/origin/" .. revision)
+  return exitcode == 0
 end
 
 ---@param username string
@@ -37,14 +56,19 @@ Git.get_commit_dates = function(username, _branch)
 
   local branch = _branch
 
-  if _branch == "main" then
-    branch = _branch
-  else
-    branch = branch .. " --not origin/main"
+  -- cleanup commits by filtering commits from base branch
+  local basepoints = config.get().basepoints
+  if not vim.tbl_contains(basepoints, branch) then
+    for _, basepoint in ipairs(basepoints) do
+      if Git._revision_exists_origin(basepoint) then
+        branch = branch .. " --not origin/" .. basepoint
+        break
+      end
+    end
   end
 
   local git_command = string.format(
-    "git log "
+    "git --no-pager log "
       .. branch
       .. ' --author="%s" --since="'
       .. since_date

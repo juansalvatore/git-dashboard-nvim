@@ -48,4 +48,8 @@ Utils.current_date_info = function()
   }
 end
 
+Utils.trim = function(str)
+  return str:gsub("^%s+", ""):gsub("%s+$", "")
+end
+
 return Utils

@@ -9,6 +9,13 @@ M = {}
 M.setup = function(config)
   config = config_utils.set_config_defaults(config)
 
+  utils.create_dashboard_update_on_shell_cmd()
+
+  return M.heatmap()
+end
+
+M.heatmap = function()
+  local config = config_utils.get()
   local ascii_heatmap = heatmap.generate_heatmap(config)
 
   if ascii_heatmap == "" then
@@ -18,8 +25,6 @@ M.setup = function(config)
       ascii_heatmap = string.rep("\n", 10)
     end
   end
-
-  utils.create_dashboard_update_on_shell_cmd()
 
   return vim.split(
     string.rep("\n", config.top_padding) .. ascii_heatmap .. string.rep("\n", config.bottom_padding),

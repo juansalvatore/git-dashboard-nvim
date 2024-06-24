@@ -218,7 +218,7 @@ If you decide to create your own feel free to commit your config with a screen c
   <summary>Code</summary>
 
   ```lua
-          local ascii_heatmap = require('git-dashboard-nvim').setup {
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
         title = 'owner_with_repo_name',
         show_only_weeks_with_commits = true,
       }
@@ -420,7 +420,7 @@ If you decide to create your own feel free to commit your config with a screen c
         filled_squares = { '', '', '', '', '', '' },
         empty_square = '',
         colors = {
-          -- tokinight colors
+          -- tokionight colors
           days_and_months_labels = '#61afef',
           empty_square_highlight = '#3e4452',
           filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },

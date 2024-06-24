@@ -408,6 +408,83 @@ vim.g.have_nerd_font = true
 ```
 </details>
 
+### Different gap and fill ascii
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/a4bc9e9d-35d4-4eee-8e80-021d0a786497">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        filled_squares = { '█', '█', '█', '█', '█', '█' },
+        empty_square = ' ',
+        gap = '',
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Vertical with different filled and empty squares, and different gap
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/142e3f63-d8a8-46e9-89ae-c81f5cffc915">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        is_horizontal = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        filled_squares = { '█', '█', '█', '█', '█', '█' },
+        empty_square = ' ',
+        gap = '',
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
 ## ⇁ Contribution
 This project open source, so feel free to fork if you want very specific functionality. If you wish to
 contribute I am totally willing for PRs, as long as your PR leaves the default look 

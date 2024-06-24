@@ -696,6 +696,10 @@ and functionality intact I will accept features that build on top or improve thi
 I started using nvim around two months ago along with lua, so this is a project I mainly built for myself and to learn a bit more about lua and nvim,
 but given that I think someone else may enjoy having this as their dashboard I decided to make it open source.
 
+**Current loading speed**</br></br>
+<img width="403" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/f3ac7d90-c26a-4569-8959-a39eda224840">
+
+
 **Tests**
 I'm using [plenary](https://github.com/nvim-lua/plenary.nvim) and for now I'm just running them using <Plug>PlenaryTestFile %
 

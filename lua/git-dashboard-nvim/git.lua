@@ -1,4 +1,5 @@
 local utils = require("git-dashboard-nvim.utils")
+local config = require("git-dashboard-nvim.config")
 
 Git = {}
 
@@ -55,9 +56,8 @@ Git.get_commit_dates = function(username, _branch)
 
   local branch = _branch
 
-  -- should be configurable
-  local basepoints = { "master", "main", "develop" }
-
+  -- cleanup commits by filtering commits from base branch
+  local basepoints = config.get().basepoints
   if not vim.tbl_contains(basepoints, branch) then
     for _, basepoint in ipairs(basepoints) do
       if Git._revision_exists_origin(basepoint) then

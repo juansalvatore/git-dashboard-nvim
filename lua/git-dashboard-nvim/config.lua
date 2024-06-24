@@ -28,6 +28,7 @@ Config = {}
 ---@field days string[]
 ---@field months string[]
 ---@field use_current_branch boolean
+---@field basepoints string[] remove commits from base branch, empty array to disable and show all commits
 ---@field colors Colors
 
 ---@type Config
@@ -52,6 +53,7 @@ local defaults = {
   days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
   months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" },
   use_current_branch = true,
+  basepoints = { "master", "main" },
   colors = {
     days_and_months_labels = "#7eac6f",
     empty_square_highlight = "#54734a",
@@ -61,13 +63,21 @@ local defaults = {
   },
 }
 
+---@type Config
+local current_config = defaults
+
 ---@param config table
 Config.set_config_defaults = function(config)
-  return vim.tbl_deep_extend("force", defaults, config)
+  return vim.tbl_deep_extend("force", current_config, config)
 end
 
 Config.get_config_defaults = function()
   return defaults
+end
+
+---@return Config
+Config.get = function()
+  return current_config
 end
 
 return Config

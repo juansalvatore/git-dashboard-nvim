@@ -11,7 +11,7 @@ Config = {}
 ---@field fallback_header string
 ---@field top_padding number
 ---@field bottom_padding number
----@field author string
+---@field author string|nil filter commits base on commit author, empty string disables filter, nil defaults to git config user.name
 ---@field is_horizontal boolean
 ---@field branch string
 ---@field centered boolean

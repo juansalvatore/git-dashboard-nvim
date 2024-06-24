@@ -23,6 +23,14 @@ Git.get_repo_with_owner = function()
   end
 
   return ""
+Git.get_username = function()
+  local handle = io.popen("git config user.name")
+  if not handle then
+    return ""
+  end
+
+  local username = handle:read("*a")
+  return utils.trim(username)
 end
 
 ---@param username string

@@ -30,6 +30,7 @@ It mainly solves the issue of tracking project based progress in a visual way an
 * neovim 0.8.0+ required
 * install using your favorite plugin manager (i am using `Lazy` in this case)
 * install using [lazy.nvim](https://github.com/folke/lazy.nvim)
+* Install [nvimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim)
   
 ```lua
 {
@@ -39,12 +40,12 @@ It mainly solves the issue of tracking project based progress in a visual way an
       { 'juansalvatore/git-dashboard-nvim', dependencies = { 'nvim-lua/plenary.nvim' } },
     },
     opts = function()
-      local ascii_heatmap = require('git-dashboard-nvim').setup {}
+      local git_dashboard = require('git-dashboard-nvim').setup {}
 
       local opts = {
         theme = 'doom',
         config = {
-          header = ascii_heatmap,
+          header = git_dashboard,
         },
       }
 
@@ -52,7 +53,7 @@ It mainly solves the issue of tracking project based progress in a visual way an
 
       return opts
     end,
-  }
+}
 ```
 
 ## ⇁ Getting Started
@@ -61,32 +62,49 @@ By default it tracks all commits, but you can specify an author to just track th
 
 ## ⇁ Config
 This is the default config, feel free to change things around (some things like chaning months or day labels may look bad if more characters are added)
+<details>
+  <summary>Default config</summary>
+  
 ```lua
-      local ascii_heatmap = require('git-dashboard-nvim').setup {
-        branch = 'main',
-        use_current_branch = true, -- if false it will use the branch specified in the config
-        title = 'repo_name', -- "owner_with_repo_name" | "repo_name" | "none"
-        show_current_branch = true,
-        gap = ' ', -- gap between heatmap chart squares
-        top_padding = 23,
-        bottom_padding = 20,
-        show_repo_name = true,
-        fallback_header = '', -- if you are not on a git repo it will show this header
+      local git_dashboard = require('git-dashboard-nvim').setup {
+        fallback_header = '',
+        top_padding = 0,
+        bottom_padding = 0,
         author = '',
-        day_label_gap = ' ',
-        empty = ' ', -- empty space character
+        branch = 'main',
+        gap = ' ',
+        day_label_gap = ' ',
+        empty = ' ',
         empty_square = '□',
-        filled_square = '■',
+        filled_squares = { '■', '■', '■', '■', '■', '■' },
+        hide_cursor = true,
         is_horizontal = true,
-        show_contributions_count = true, -- (only for vertical heatmap)
+        show_contributions_count = true,
+        show_only_weeks_with_commits = false,
+        title = 'repo_name',
+        show_current_branch = true,
         days = { 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' },
         months = { 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' },
+        use_current_branch = true,
         colors = {
           days_and_months_labels = '#7eac6f',
           empty_square_highlight = '#54734a',
-          filled_square_highlight = '#AFD2A3',
+          filled_square_highlights = { '#2a3925', '#54734a', '#7eac6f', '#98c689', '#afd2a3', '#bad9b0' },
           branch_highlight = '#8DC07C',
           dashboard_title = '#a3cc96',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = git_dashboard,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
         },
       }
 ```
@@ -96,7 +114,7 @@ This is the default config, feel free to change things around (some things like 
 ---@class Colors
 ---@field days_and_months_labels string
 ---@field empty_square_highlight string
----@field filled_square_highlight string
+---@field filled_square_highlights string[]
 ---@field branch_highlight string
 ---@field dashboard_title string
 
@@ -110,9 +128,11 @@ This is the default config, feel free to change things around (some things like 
 ---@field gap string
 ---@field day_label_gap string
 ---@field empty string
+---@field hide_cursor boolean
 ---@field empty_square string
 ---@field show_contributions_count boolean
----@field filled_square string
+---@field show_only_weeks_with_commits boolean
+---@field filled_squares string[]
 ---@field title "owner_with_repo_name" | "repo_name" | "none"
 ---@field show_current_branch boolean
 ---@field days string[]
@@ -120,6 +140,7 @@ This is the default config, feel free to change things around (some things like 
 ---@field use_current_branch boolean
 ---@field colors Colors
 ```
+</details>
 
 If you want to have an icons show (Eg. branch icon) install a nerd font and set
 the following global in your `init.lua`:

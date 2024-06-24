@@ -485,6 +485,74 @@ vim.g.have_nerd_font = true
 ```
 </details>
 
+### Tracking more than one branch
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/ee89b30e-fe27-4e04-8098-e7d66b1489cd">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+          local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        use_current_branch = false,
+        branch = 'main',
+        title = 'owner_with_repo_name',
+        top_padding = 15,
+        centered = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local ascii_heatmap2 = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        use_current_branch = true,
+        branch = 'main',
+        centered = false,
+        title = 'none',
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local header = {}
+
+      for _, line in ipairs(ascii_heatmap) do
+        table.insert(header, line)
+      end
+
+      for _, line in ipairs(ascii_heatmap2) do
+        table.insert(header, line)
+      end
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = header,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
 ## ⇁ Contribution
 This project open source, so feel free to fork if you want very specific functionality. If you wish to
 contribute I am totally willing for PRs, as long as your PR leaves the default look 

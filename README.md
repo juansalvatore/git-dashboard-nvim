@@ -126,6 +126,135 @@ the following global in your `init.lua`:
 vim.g.have_nerd_font = true
 ```
 
+## ⇁ Style Variations
+
+### Default
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/41c62850-b559-40cb-af68-235e2e938157">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {}
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Only weeks with commits
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/47192a22-d8ce-478f-9491-2f031166a982">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### With repo owner
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/93ed7bca-df18-4586-b5a1-bca7126923ca">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+          local ascii_heatmap = require('git-dashboard-nvim').setup {
+        title = 'owner_with_repo_name',
+        show_only_weeks_with_commits = true,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Updated day labels
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/344b9f15-b5b2-4097-bb42-1861b39fd753">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+
+```
+</details>
+
+### Updated empty square
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/29b4fb39-8d8e-4503-aab7-d317ea679246">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        days = { 'в', 'п', 'в', 'с', 'ч', 'п', 'с' },
+        show_only_weeks_with_commits = true,
+        empty_square = ' ',
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
 ## ⇁ Contribution
 This project open source, so feel free to fork if you want very specific functionality. If you wish to
 contribute I am totally willing for PRs, as long as your PR leaves the default look 

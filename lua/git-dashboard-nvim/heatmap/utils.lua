@@ -181,6 +181,8 @@ HeatmapUtils.generate_ascii_heatmap = function(
 
           ascii_heatmap = ascii_heatmap .. " " .. sum_str .. " "
         end
+      elseif config.show_only_weeks_with_commits == false then
+        ascii_heatmap = ascii_heatmap .. "    "
       end
 
       if sum ~= 0 or config.show_only_weeks_with_commits == false then

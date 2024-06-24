@@ -12,17 +12,21 @@ Git.get_repo_with_owner = function()
   local remote_url = handle:read("*a")
   handle:close()
 
-  if remote_url and remote_url ~= "" then
-    remote_url = remote_url:gsub("%s+", "") -- Remove any trailing newlines or spaces
-
-    local name_with_owner = remote_url:match("github%.com[:/]([^/]+/[^/.]+)%.git")
-      or remote_url:match("github%.com[:/]([^/]+/[^/.]+)")
-    if name_with_owner then
-      return name_with_owner
-    end
+  if not remote_url or remote_url == "" then
+    return ""
   end
 
-  return ""
+  remote_url = remote_url:gsub("%s+", "") -- Remove any trailing newlines or spaces
+
+  return Git._parse_repo_and_owner(remote_url)
+end
+
+Git._parse_repo_and_owner = function(remote_url)
+  return remote_url:match(".*%..*[:/]([^/]+/[^/.]+)")
+    or remote_url:match(".*%..*[:/]([^/]+/[^/.]+).git")
+    or ""
+end
+
 Git.get_username = function()
   local handle = io.popen("git config user.name")
   if not handle then

@@ -22,8 +22,9 @@
 
 ## ⇁ Intro
 `git-dashboard-nvim` is a modular solution to displaying your git commit contributions as an nvim heatmap dashboard.
-It uses [vimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim) as the base for the dashboard and this plugin generates the header dynamically that we can pass to dashboard-nvim. This allows you to use your dashboard as always.
-It mainly solves the issue of tracking project based progress in a visual way and making my nvim dashboard look cool while still being useful by showcasing the current git branch and project.
+It uses [vimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim) as the base for the dashboard and this plugin generates the header dynamically that we can pass to dashboard-nvim. 
+This plugin allows you to track project based progress in a visual way, making your nvim dashboard look cool while still being useful by showcasing the current git branch and project.
+I've mainly developed this plugin for myself, so to make sure it looks well for you, check the [Style Variations](#-Style-Variations) section, to see some fun styling configurations.
 
 
 ## ⇁ Installation
@@ -73,6 +74,7 @@ This is the default config, feel free to change things around (some things like 
         author = '',
         branch = 'main',
         gap = ' ',
+        centered = true,
         day_label_gap = ' ',
         empty = ' ',
         empty_square = '□',
@@ -125,6 +127,7 @@ This is the default config, feel free to change things around (some things like 
 ---@field author string
 ---@field is_horizontal boolean
 ---@field branch string
+---@field centered boolean
 ---@field gap string
 ---@field day_label_gap string
 ---@field empty string
@@ -634,6 +637,38 @@ vim.g.have_nerd_font = true
           header = header,
           center = {
             { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Showing a center section
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/c57632d0-631c-475b-a128-f557bf7aeae9">
+
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local git_dashboard = require('git-dashboard-nvim').setup {
+        centered = false,
+        top_padding = 19,
+        bottom_padding = 2,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = git_dashboard,
+          center = {
+            { action = 'ene | startinsert', desc = ' New File', icon = ' ', key = 'n' },
+            { action = 'Telescope oldfiles', desc = ' Recent Files', icon = ' ', key = 'r' },
+            { action = 'Telescope live_grep', desc = ' Find Text', icon = ' ', key = 'g' },
+            { action = 'Lazy', desc = ' Lazy', icon = '󰒲 ', key = 'l' },
+            { action = 'qa', desc = ' Quit', icon = ' ', key = 'q' },
           },
           footer = function()
             return {}

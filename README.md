@@ -336,6 +336,78 @@ vim.g.have_nerd_font = true
 ```
 </details>
 
+### Catppuccin theme
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/ee821eef-6dfe-481b-93d6-c3fb703c1f29">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          --catpuccin theme
+          days_and_months_labels = '#8FBCBB',
+          empty_square_highlight = '#3B4252',
+          filled_square_highlights = { '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0' },
+          branch_highlight = '#88C0D0',
+          dashboard_title = '#88C0D0',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Different ascii characters
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/617855ff-488c-440f-81a7-0fd91533ce78">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        filled_squares = { '', '', '', '', '', '' },
+        empty_square = '',
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
 ## ⇁ Contribution
 This project open source, so feel free to fork if you want very specific functionality. If you wish to
 contribute I am totally willing for PRs, as long as your PR leaves the default look 

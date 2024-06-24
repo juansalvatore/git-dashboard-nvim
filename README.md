@@ -9,6 +9,9 @@
 <img width="831" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/85609c97-22be-4a92-8f21-568c00f1d207">
 </div>
 
+### 🚧 Warning 
+This plugin is in alpha version and you may encounter unexpected edge cases. I developed the plugin for personal use but I figured people might enjoy using it.
+I may add breaking changes to improve the config in the future.
 
 ## ⇁ TOC
 * [Intro](#-Intro)

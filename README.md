@@ -80,6 +80,7 @@ This is the default config, feel free to change things around (some things like 
         fallback_header = '',
         top_padding = 0,
         bottom_padding = 0,
+        use_git_username_as_author = false,
         author = '',
         branch = 'main',
         gap = ' ',
@@ -97,6 +98,7 @@ This is the default config, feel free to change things around (some things like 
         days = { 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' },
         months = { 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' },
         use_current_branch = true,
+        basepoints = { "master", "main" },
         colors = {
           days_and_months_labels = '#7eac6f',
           empty_square_highlight = '#54734a',
@@ -133,7 +135,8 @@ This is the default config, feel free to change things around (some things like 
 ---@field fallback_header string
 ---@field top_padding number
 ---@field bottom_padding number
----@field author string
+---@field use_git_username_as_author boolean
+---@field author string ignored if use_git_username_as_author is true
 ---@field is_horizontal boolean
 ---@field branch string
 ---@field centered boolean
@@ -150,6 +153,7 @@ This is the default config, feel free to change things around (some things like 
 ---@field days string[]
 ---@field months string[]
 ---@field use_current_branch boolean
+---@field basepoints string[] remove commits from base branch, empty array to disable and show all commits
 ---@field colors Colors
 ```
 </details>

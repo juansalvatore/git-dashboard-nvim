@@ -90,6 +90,7 @@ describe("heatmap", function()
     }
 
     local config_defaults = config.get_config_defaults()
+    config_defaults.centered = false
 
     local repo_with_owner = "owner/repo"
 
@@ -100,14 +101,14 @@ describe("heatmap", function()
       ascii_heatmap,
       [[repo
 
-     Jan     Feb     Mar     Apr     May     Jun 
-Sun □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ ■ 
-Mon □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
-Tue □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
-Wed □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ ■ □ 
-Thu □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
-Fri □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
-Sat □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ ■ □ 
+     Jan     Feb     Mar     Apr     May     Jun 
+Sun □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ ■ 
+Mon □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
+Tue □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
+Wed □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ ■ □ 
+Thu □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
+Fri □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
+Sat □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ ■ □ 
 
  main
 ]]
@@ -174,7 +175,9 @@ Sat □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
     eq(base_heatmap, {
       { 1, 0, 0, 0, 0, 0, 0 },
     })
+
     local config_defaults = config.get_config_defaults()
+    config_defaults.centered = false
 
     local repo_with_owner = "owner/repo"
 
@@ -185,14 +188,14 @@ Sat □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ □ 
       ascii_heatmap,
       [[repo
 
-     Jan 
-Sun ■ 
-Mon   
-Tue   
-Wed   
-Thu   
-Fri   
-Sat   
+     Jan 
+Sun ■ 
+Mon   
+Tue   
+Wed   
+Thu   
+Fri   
+Sat   
 
  main
 ]]

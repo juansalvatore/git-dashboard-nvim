@@ -17,11 +17,16 @@ describe("config", function()
       bottom_padding = 0,
       author = "",
       branch = "main",
-      gap = " ",
-      day_label_gap = " ",
-      empty = " ",
+      gap = " ",
+      day_label_gap = " ",
+      empty = " ",
       empty_square = "□",
-      filled_square = "■",
+      filled_squares = { "■", "■", "■", "■", "■", "■" },
+      hide_cursor = true,
+      centered = true,
+      is_horizontal = true,
+      show_contributions_count = true,
+      show_only_weeks_with_commits = false,
       title = "repo_name",
       show_current_branch = true,
       days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
@@ -40,6 +45,20 @@ describe("config", function()
         "Dec",
       },
       use_current_branch = true,
+      colors = {
+        days_and_months_labels = "#7eac6f",
+        empty_square_highlight = "#54734a",
+        filled_square_highlights = {
+          "#2a3925",
+          "#54734a",
+          "#7eac6f",
+          "#98c689",
+          "#afd2a3",
+          "#bad9b0",
+        },
+        branch_highlight = "#8DC07C",
+        dashboard_title = "#a3cc96",
+      },
     })
   end)
 
@@ -106,6 +125,26 @@ describe("config", function()
         "Dec",
       },
       use_current_branch = true,
+      filled_squares = { "■", "■", "■", "■", "■", "■" },
+      hide_cursor = true,
+      centered = true,
+      is_horizontal = true,
+      show_contributions_count = true,
+      show_only_weeks_with_commits = false,
+      colors = {
+        days_and_months_labels = "#7eac6f",
+        empty_square_highlight = "#54734a",
+        filled_square_highlights = {
+          "#2a3925",
+          "#54734a",
+          "#7eac6f",
+          "#98c689",
+          "#afd2a3",
+          "#bad9b0",
+        },
+        branch_highlight = "#8DC07C",
+        dashboard_title = "#a3cc96",
+      },
     })
   end)
 end)

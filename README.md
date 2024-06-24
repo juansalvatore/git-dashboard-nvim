@@ -701,7 +701,7 @@ but given that I think someone else may enjoy having this as their dashboard I d
 
 
 **Tests**
-I'm using [plenary](https://github.com/nvim-lua/plenary.nvim) and for now I'm just running them using <Plug>PlenaryTestFile %
+I'm using [plenary](https://github.com/nvim-lua/plenary.nvim) and for now I'm just running them using `<Plug>PlenaryTestFile %`
 
 ## ⇁ Social
 * [Twitter](https://twitter.com/jnsalvatore)

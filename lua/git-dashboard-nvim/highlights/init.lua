@@ -28,7 +28,7 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
 
   for i = 1, #config.days do
     Highlights._add_highlight_group(
-      "DashboardHeaderDay" .. i,
+      "DashboardHeaderDay",
       config.days[i]:sub(1, 3),
       config.colors.days_and_months_labels
     )
@@ -36,7 +36,7 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
 
   for i = 1, current_date_info.current_month do
     Highlights._add_highlight_group(
-      "DashboardHeaderMonth" .. i,
+      "DashboardHeaderMonth",
       config.months[i]:sub(1, 3),
       config.colors.days_and_months_labels
     )
@@ -60,7 +60,11 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
     branch_label,
     config.colors.branch_highlight
   )
-
+  vim.cmd.autocmd(
+    "BufLeave",
+    "*",
+    "highlight clear DashboardHeaderEmptySquare | highlight clear DashboardHeaderDay | highlight clear DashboardHeaderMonth | highlight clear DashboardHeaderFilledSquare | highlight clear DashboardHeaderTitle | highlight clear DashboardHeaderBranch"
+  )
   -- set cursor color to white when leaving the buffer
   vim.cmd.autocmd("BufLeave", "*", "highlight Cursor blend=0")
   vim.cmd.autocmd("BufLeave", "*", "set guicursor+=a:Cursor/lCursor")

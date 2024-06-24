@@ -51,7 +51,7 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
   end
 
   -- add highlight to match any number
-  vim.cmd("call matchadd('DashboardHeaderMonthHighlight', '\\d\\+')")
+  vim.cmd("call matchadd('DashboardHeaderMonth', '\\d\\+')")
 
   Highlights._add_highlight_group("DashboardHeaderTitle", title, config.colors.dashboard_title)
 

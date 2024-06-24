@@ -255,6 +255,87 @@ vim.g.have_nerd_font = true
 ```
 </details>
 
+### Updated filled squares with different characters
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/cfb44a10-69ba-4f6e-bc36-4e6a15e8f417">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        days = { 'в', 'п', 'в', 'с', 'ч', 'п', 'с' },
+        show_only_weeks_with_commits = true,
+        empty_square = ' ',
+        filled_squares = { '', '', '', '', '', '' },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Vertical with weekly commits
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/5dd671ac-6edc-4055-a850-f610dfe08ae3">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        is_horizontal = false,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Vertical without weekly commits
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/a5168e28-4e69-4add-89e1-233ab58535f8">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        is_horizontal = false,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
 ## ⇁ Contribution
 This project open source, so feel free to fork if you want very specific functionality. If you wish to
 contribute I am totally willing for PRs, as long as your PR leaves the default look 

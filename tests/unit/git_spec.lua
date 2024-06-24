@@ -19,49 +19,67 @@ describe("git", function()
     assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
   end)
 
-  it("should parse repo with owner from bitbucket ssh url", function()
-    local git = require("git-dashboard-nvim.git")
-    local repo_with_owner =
-      git._parse_repo_and_owner("git@bitbucket.org:juansalvatore/git-dashboard-nvim.git")
+  describe("_parse_repo_and_owner", function()
+    it("should parse repo with owner from bitbucket ssh url", function()
+      local git = require("git-dashboard-nvim.git")
+      local repo_with_owner =
+        git._parse_repo_and_owner("git@bitbucket.org:juansalvatore/git-dashboard-nvim.git")
 
-    assert(repo_with_owner ~= nil)
-    assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
+      assert(repo_with_owner ~= nil)
+      assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
+    end)
+
+    it("should parse repo with owner from github ssh url", function()
+      local git = require("git-dashboard-nvim.git")
+      local repo_with_owner =
+        git._parse_repo_and_owner("git@github.com:juansalvatore/git-dashboard-nvim.git")
+
+      assert(repo_with_owner ~= nil)
+      assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
+    end)
+
+    it("should parse repo with owner from github ssh url without .git", function()
+      local git = require("git-dashboard-nvim.git")
+      local repo_with_owner =
+        git._parse_repo_and_owner("git@github.com:juansalvatore/git-dashboard-nvim")
+
+      assert(repo_with_owner ~= nil)
+      assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
+    end)
+
+    it("should parse repo with owner from github https url", function()
+      local git = require("git-dashboard-nvim.git")
+      local repo_with_owner =
+        git._parse_repo_and_owner("https://github.com/juansalvatore/git-dashboard-nvim.git")
+
+      assert(repo_with_owner ~= nil)
+      assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
+    end)
+
+    it("should parse repo with owner from github https url without .git", function()
+      local git = require("git-dashboard-nvim.git")
+      local repo_with_owner =
+        git._parse_repo_and_owner("https://github.com/juansalvatore/git-dashboard-nvim")
+
+      assert(repo_with_owner ~= nil)
+      assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
+    end)
   end)
 
-  it("should parse repo with owner from github ssh url", function()
-    local git = require("git-dashboard-nvim.git")
-    local repo_with_owner =
-      git._parse_repo_and_owner("git@github.com:juansalvatore/git-dashboard-nvim.git")
+  describe("_revision_exists_origin", function()
+    it("should return true for existing ref", function()
+      local git = require("git-dashboard-nvim.git")
+      local result = git._revision_exists_origin("main")
 
-    assert(repo_with_owner ~= nil)
-    assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
-  end)
+      assert(result)
+    end)
 
-  it("should parse repo with owner from github ssh url without .git", function()
-    local git = require("git-dashboard-nvim.git")
-    local repo_with_owner =
-      git._parse_repo_and_owner("git@github.com:juansalvatore/git-dashboard-nvim")
+    it("should return false for non-existing ref", function()
+      local git = require("git-dashboard-nvim.git")
+      local result = git._revision_exists_origin("master")
 
-    assert(repo_with_owner ~= nil)
-    assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
-  end)
-
-  it("should parse repo with owner from github https url", function()
-    local git = require("git-dashboard-nvim.git")
-    local repo_with_owner =
-      git._parse_repo_and_owner("https://github.com/juansalvatore/git-dashboard-nvim.git")
-
-    assert(repo_with_owner ~= nil)
-    assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
-  end)
-
-  it("should parse repo with owner from github https url without .git", function()
-    local git = require("git-dashboard-nvim.git")
-    local repo_with_owner =
-      git._parse_repo_and_owner("https://github.com/juansalvatore/git-dashboard-nvim")
-
-    assert(repo_with_owner ~= nil)
-    assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
+      assert(not result)
+    end)
   end)
 
   it("should return commit dates", function()

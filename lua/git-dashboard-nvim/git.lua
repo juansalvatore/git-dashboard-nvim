@@ -37,6 +37,12 @@ Git.get_username = function()
   return utils.trim(username)
 end
 
+---@param revision string
+Git._revision_exists_origin = function(revision)
+  local exitcode = os.execute("git show-ref --verify --quiet refs/remotes/origin/" .. revision)
+  return exitcode == 0
+end
+
 ---@param username string
 ---@param _branch string
 ---@return table
@@ -49,14 +55,20 @@ Git.get_commit_dates = function(username, _branch)
 
   local branch = _branch
 
-  if _branch == "main" then
-    branch = _branch
-  else
-    branch = branch .. " --not origin/main"
+  -- should be configurable
+  local basepoints = { "master", "main", "develop" }
+
+  if not vim.tbl_contains(basepoints, branch) then
+    for _, basepoint in ipairs(basepoints) do
+      if Git._revision_exists_origin(basepoint) then
+        branch = branch .. " --not origin/" .. basepoint
+        break
+      end
+    end
   end
 
   local git_command = string.format(
-    "git log "
+    "git --no-pager log "
       .. branch
       .. ' --author="%s" --since="'
       .. since_date

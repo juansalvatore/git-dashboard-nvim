@@ -15,20 +15,23 @@
 * [Installation](#-Installation)
 * [Getting Started](#-Getting-Started)
 * [Config](#-Config)
+* [Style Variations](#-Style-Variations)
 * [Contribution](#-Contribution)
 * [Social](#-Social)
 
 
 ## ⇁ Intro
 `git-dashboard-nvim` is a modular solution to displaying your git commit contributions as an nvim heatmap dashboard.
-It uses [vimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim) as the base for the dashboard and this plugin generates the header dynamically that we can pass to dashboard-nvim. This allows you to use your dashboard as always.
-It mainly solves the issue of tracking project based progress in a visual way and making my nvim dashboard look cool while still being useful by showcasing the current git branch and project.
+It uses [vimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim) as the base for the dashboard and this plugin generates the header dynamically that we can pass to dashboard-nvim. 
+This plugin allows you to track project based progress in a visual way, making your nvim dashboard look cool while still being useful by showcasing the current git branch and project.
+I've mainly developed this plugin for myself, so to make sure it looks well for you, check the [Style Variations](#-Style-Variations) section, to see some fun styling configurations.
 
 
 ## ⇁ Installation
 * neovim 0.8.0+ required
 * install using your favorite plugin manager (i am using `Lazy` in this case)
 * install using [lazy.nvim](https://github.com/folke/lazy.nvim)
+* Install [nvimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim)
   
 ```lua
 {
@@ -38,12 +41,12 @@ It mainly solves the issue of tracking project based progress in a visual way an
       { 'juansalvatore/git-dashboard-nvim', dependencies = { 'nvim-lua/plenary.nvim' } },
     },
     opts = function()
-      local ascii_heatmap = require('git-dashboard-nvim').setup {}
+      local git_dashboard = require('git-dashboard-nvim').setup {}
 
       local opts = {
         theme = 'doom',
         config = {
-          header = ascii_heatmap,
+          header = git_dashboard,
         },
       }
 
@@ -51,7 +54,7 @@ It mainly solves the issue of tracking project based progress in a visual way an
 
       return opts
     end,
-  }
+}
 ```
 
 ## ⇁ Getting Started
@@ -60,32 +63,50 @@ By default it tracks all commits, but you can specify an author to just track th
 
 ## ⇁ Config
 This is the default config, feel free to change things around (some things like chaning months or day labels may look bad if more characters are added)
+<details>
+  <summary>Default config</summary>
+  
 ```lua
-      local ascii_heatmap = require('git-dashboard-nvim').setup {
-        branch = 'main',
-        use_current_branch = true, -- if false it will use the branch specified in the config
-        title = 'repo_name', -- "owner_with_repo_name" | "repo_name" | "none"
-        show_current_branch = true,
-        gap = ' ', -- gap between heatmap chart squares
-        top_padding = 23,
-        bottom_padding = 20,
-        show_repo_name = true,
-        fallback_header = '', -- if you are not on a git repo it will show this header
+      local git_dashboard = require('git-dashboard-nvim').setup {
+        fallback_header = '',
+        top_padding = 0,
+        bottom_padding = 0,
         author = '',
-        day_label_gap = ' ',
-        empty = ' ', -- empty space character
+        branch = 'main',
+        gap = ' ',
+        centered = true,
+        day_label_gap = ' ',
+        empty = ' ',
         empty_square = '□',
-        filled_square = '■',
+        filled_squares = { '■', '■', '■', '■', '■', '■' },
+        hide_cursor = true,
         is_horizontal = true,
-        show_contributions_count = true, -- (only for vertical heatmap)
+        show_contributions_count = true,
+        show_only_weeks_with_commits = false,
+        title = 'repo_name',
+        show_current_branch = true,
         days = { 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' },
         months = { 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' },
+        use_current_branch = true,
         colors = {
           days_and_months_labels = '#7eac6f',
           empty_square_highlight = '#54734a',
-          filled_square_highlight = '#AFD2A3',
+          filled_square_highlights = { '#2a3925', '#54734a', '#7eac6f', '#98c689', '#afd2a3', '#bad9b0' },
           branch_highlight = '#8DC07C',
           dashboard_title = '#a3cc96',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = git_dashboard,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
         },
       }
 ```
@@ -95,7 +116,7 @@ This is the default config, feel free to change things around (some things like 
 ---@class Colors
 ---@field days_and_months_labels string
 ---@field empty_square_highlight string
----@field filled_square_highlight string
+---@field filled_square_highlights string[]
 ---@field branch_highlight string
 ---@field dashboard_title string
 
@@ -106,12 +127,15 @@ This is the default config, feel free to change things around (some things like 
 ---@field author string
 ---@field is_horizontal boolean
 ---@field branch string
+---@field centered boolean
 ---@field gap string
 ---@field day_label_gap string
 ---@field empty string
+---@field hide_cursor boolean
 ---@field empty_square string
 ---@field show_contributions_count boolean
----@field filled_square string
+---@field show_only_weeks_with_commits boolean
+---@field filled_squares string[]
 ---@field title "owner_with_repo_name" | "repo_name" | "none"
 ---@field show_current_branch boolean
 ---@field days string[]
@@ -119,6 +143,7 @@ This is the default config, feel free to change things around (some things like 
 ---@field use_current_branch boolean
 ---@field colors Colors
 ```
+</details>
 
 If you want to have an icons show (Eg. branch icon) install a nerd font and set
 the following global in your `init.lua`:
@@ -246,6 +271,404 @@ vim.g.have_nerd_font = true
           header = ascii_heatmap,
           center = {
             { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Updated filled squares with different characters
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/cfb44a10-69ba-4f6e-bc36-4e6a15e8f417">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        days = { 'в', 'п', 'в', 'с', 'ч', 'п', 'с' },
+        show_only_weeks_with_commits = true,
+        empty_square = ' ',
+        filled_squares = { '', '', '', '', '', '' },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Vertical with weekly commits
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/5dd671ac-6edc-4055-a850-f610dfe08ae3">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        is_horizontal = false,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Vertical without weekly commits
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/a5168e28-4e69-4add-89e1-233ab58535f8">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        is_horizontal = false,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Catppuccin theme
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/ee821eef-6dfe-481b-93d6-c3fb703c1f29">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          --catpuccin theme
+          days_and_months_labels = '#8FBCBB',
+          empty_square_highlight = '#3B4252',
+          filled_square_highlights = { '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0', '#88C0D0' },
+          branch_highlight = '#88C0D0',
+          dashboard_title = '#88C0D0',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Different ascii characters
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/617855ff-488c-440f-81a7-0fd91533ce78">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        filled_squares = { '', '', '', '', '', '' },
+        empty_square = '',
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Different gap and fill ascii
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/a4bc9e9d-35d4-4eee-8e80-021d0a786497">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        filled_squares = { '█', '█', '█', '█', '█', '█' },
+        empty_square = ' ',
+        gap = '',
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Vertical with different filled and empty squares, and different gap
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/142e3f63-d8a8-46e9-89ae-c81f5cffc915">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        is_horizontal = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        filled_squares = { '█', '█', '█', '█', '█', '█' },
+        empty_square = ' ',
+        gap = '',
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = ascii_heatmap,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Tracking more than one branch
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/ee89b30e-fe27-4e04-8098-e7d66b1489cd">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+          local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        use_current_branch = false,
+        branch = 'main',
+        title = 'owner_with_repo_name',
+        top_padding = 15,
+        centered = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local ascii_heatmap2 = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        use_current_branch = true,
+        branch = 'main',
+        centered = false,
+        title = 'none',
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local header = {}
+
+      for _, line in ipairs(ascii_heatmap) do
+        table.insert(header, line)
+      end
+
+      for _, line in ipairs(ascii_heatmap2) do
+        table.insert(header, line)
+      end
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = header,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Fallback header for when you are not inside a git repository
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/07c99abb-f775-4c23-9f55-1cc7476dd1a0">
+<details>
+  <summary>Code</summary>
+
+  ```lua
+          local ascii_heatmap = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        use_current_branch = false,
+        branch = 'main',
+        title = 'owner_with_repo_name',
+        top_padding = 15,
+        centered = false,
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local ascii_heatmap2 = require('git-dashboard-nvim').setup {
+        show_only_weeks_with_commits = true,
+        show_contributions_count = false,
+        use_current_branch = true,
+        branch = 'main',
+        centered = false,
+        title = 'none',
+        days = { 's', 'm', 't', 'w', 't', 'f', 's' },
+        colors = {
+          -- tokinight colors
+          days_and_months_labels = '#61afef',
+          empty_square_highlight = '#3e4452',
+          filled_square_highlights = { '#61afef', '#61afef', '#61afef', '#61afef', '#61afef', '#61afef' },
+          branch_highlight = '#61afef',
+          dashboard_title = '#61afef',
+        },
+      }
+
+      local header = {}
+
+      for _, line in ipairs(ascii_heatmap) do
+        table.insert(header, line)
+      end
+
+      for _, line in ipairs(ascii_heatmap2) do
+        table.insert(header, line)
+      end
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = header,
+          center = {
+            { action = '', desc = '', icon = '', key = 'n' },
+          },
+          footer = function()
+            return {}
+          end,
+        },
+      }
+```
+</details>
+
+### Showing a center section
+<img width="1728" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/c57632d0-631c-475b-a128-f557bf7aeae9">
+
+<details>
+  <summary>Code</summary>
+
+  ```lua
+      local git_dashboard = require('git-dashboard-nvim').setup {
+        centered = false,
+        top_padding = 19,
+        bottom_padding = 2,
+      }
+
+      local opts = {
+        theme = 'doom',
+        config = {
+          header = git_dashboard,
+          center = {
+            { action = 'ene | startinsert', desc = ' New File', icon = ' ', key = 'n' },
+            { action = 'Telescope oldfiles', desc = ' Recent Files', icon = ' ', key = 'r' },
+            { action = 'Telescope live_grep', desc = ' Find Text', icon = ' ', key = 'g' },
+            { action = 'Lazy', desc = ' Lazy', icon = '󰒲 ', key = 'l' },
+            { action = 'qa', desc = ' Quit', icon = ' ', key = 'q' },
           },
           footer = function()
             return {}

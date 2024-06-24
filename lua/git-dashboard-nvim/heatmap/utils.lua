@@ -196,11 +196,13 @@ HeatmapUtils.generate_ascii_heatmap = function(
   end
 
   -- center vertically ascii heatmap
-  local lines = vim.api.nvim_get_option("lines")
-  local ascii_heatmap_lines = vim.split(ascii_heatmap, "\n")
-  local ascii_heatmap_lines_count = #ascii_heatmap_lines
-  local padding = math.floor((lines - ascii_heatmap_lines_count) / 2)
-  ascii_heatmap = string.rep("\n", padding) .. ascii_heatmap
+  if config.centered then
+    local lines = vim.api.nvim_get_option("lines")
+    local ascii_heatmap_lines = vim.split(ascii_heatmap, "\n")
+    local ascii_heatmap_lines_count = #ascii_heatmap_lines
+    local padding = math.floor((lines - ascii_heatmap_lines_count) / 2)
+    ascii_heatmap = string.rep("\n", padding) .. ascii_heatmap
+  end
 
   return ascii_heatmap
 end

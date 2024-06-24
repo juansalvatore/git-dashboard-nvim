@@ -14,6 +14,7 @@ Config = {}
 ---@field author string
 ---@field is_horizontal boolean
 ---@field branch string
+---@field centered boolean
 ---@field gap string
 ---@field day_label_gap string
 ---@field empty string
@@ -40,9 +41,9 @@ local defaults = {
   day_label_gap = " ",
   empty = " ",
   empty_square = "□",
-  -- filled_squares = { "", "", "", "", "", "" },
   filled_squares = { "■", "■", "■", "■", "■", "■" },
   hide_cursor = true,
+  centered = true,
   is_horizontal = true,
   show_contributions_count = true,
   show_only_weeks_with_commits = false,

@@ -72,7 +72,7 @@ HeatmapUtils.generate_ascii_heatmap = function(
 
   -- add highlights to the heatmap based on the config settings
   vim.api.nvim_create_autocmd("FileType", {
-    pattern = "dashboard",
+    pattern = { "dashboard", "alpha" },
     callback = function()
       Highlights.add_highlights(config, current_date_info, branch_label, title)
 

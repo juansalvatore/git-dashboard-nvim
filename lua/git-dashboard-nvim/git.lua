@@ -1,11 +1,13 @@
 local utils = require("git-dashboard-nvim.utils")
 local config = require("git-dashboard-nvim.config")
+local is_windows = vim.fn.has("win32")
+local null = is_windows and "NUL" or "/dev/null"
 
 Git = {}
 
 ---@return string
 Git.get_repo_with_owner = function()
-  local handle = io.popen("git remote get-url origin 2>/dev/null")
+  local handle = io.popen("git remote get-url origin 2>" .. null)
   if not handle then
     return ""
   end
@@ -95,7 +97,7 @@ end
 
 ---@return string
 Git.get_current_branch = function()
-  local handle = io.popen("git branch --show-current 2>/dev/null")
+  local handle = io.popen("git branch --show-current 2>" .. null)
   if not handle then
     return ""
   end

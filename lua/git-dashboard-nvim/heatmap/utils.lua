@@ -70,20 +70,6 @@ HeatmapUtils.generate_ascii_heatmap = function(
     ascii_heatmap = ascii_heatmap .. "\n\n"
   end
 
-  -- add highlights to the heatmap based on the config settings
-  vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "dashboard", "alpha" },
-    callback = function()
-      Highlights.add_highlights(config, current_date_info, branch_label, title)
-
-      -- hide cursor
-      if config.hide_cursor == true then
-        vim.api.nvim_command("hi Cursor blend=100")
-        vim.api.nvim_command("set guicursor+=a:Cursor/lCursor")
-      end
-    end,
-  })
-
   -- horizontal heatmap
   if config.is_horizontal then
     -- add month labels
@@ -203,6 +189,30 @@ HeatmapUtils.generate_ascii_heatmap = function(
     local padding = math.floor((lines - ascii_heatmap_lines_count) / 2)
     ascii_heatmap = string.rep("\n", padding) .. ascii_heatmap
   end
+
+  -- add highlights to the heatmap based on the config settings
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "dashboard", "alpha" },
+    callback = function()
+      local start_line = 1
+      local end_line = #vim.split(ascii_heatmap, "\n")
+
+      Highlights.add_highlights(
+        config,
+        current_date_info,
+        branch_label,
+        title,
+        start_line,
+        end_line
+      )
+
+      -- hide cursor
+      if config.hide_cursor == true then
+        vim.api.nvim_command("hi Cursor blend=100")
+        vim.api.nvim_command("set guicursor+=a:Cursor/lCursor")
+      end
+    end,
+  })
 
   return ascii_heatmap
 end

@@ -5,7 +5,16 @@ Highlights = {}
 ---@param fg_color string
 Highlights._add_highlight_group = function(group_name, match, fg_color)
   vim.cmd("highlight " .. group_name .. " guifg=" .. fg_color)
-  vim.cmd('call matchadd("' .. group_name .. '", "' .. match .. '")')
+
+  -- Ensure proper escaping of special characters in `match`
+  local pattern = vim.fn.escape(match, "/")
+
+  -- Debug print to verify `pattern` before using it
+  print("Pattern:", pattern)
+
+  -- Construct the syntax match command
+  local cmd = string.format("syntax match %s /%s/ containedin=DashboardHeader", group_name, pattern)
+  vim.cmd(cmd)
 end
 
 ---@param config Config
@@ -60,6 +69,7 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
     branch_label,
     config.colors.branch_highlight
   )
+
   vim.cmd.autocmd(
     "BufLeave",
     "*",

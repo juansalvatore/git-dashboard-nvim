@@ -9,10 +9,7 @@ Highlights._add_highlight_group = function(group_name, match, fg_color)
   -- Ensure proper escaping of special characters in `match`
   local pattern = vim.fn.escape(match, "/")
 
-  -- Debug print to verify `pattern` before using it
-  print("Pattern:", pattern)
-
-  -- Construct the syntax match command
+  -- Construct the syntax match command, using containedin ensures that the match is only applied to the DashboardHeader section
   local cmd = string.format("syntax match %s /%s/ containedin=DashboardHeader", group_name, pattern)
   vim.cmd(cmd)
 end

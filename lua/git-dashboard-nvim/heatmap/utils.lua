@@ -194,17 +194,7 @@ HeatmapUtils.generate_ascii_heatmap = function(
   vim.api.nvim_create_autocmd("FileType", {
     pattern = { "dashboard", "alpha" },
     callback = function()
-      local start_line = 1
-      local end_line = #vim.split(ascii_heatmap, "\n")
-
-      Highlights.add_highlights(
-        config,
-        current_date_info,
-        branch_label,
-        title,
-        start_line,
-        end_line
-      )
+      Highlights.add_highlights(config, current_date_info, branch_label, title)
 
       -- hide cursor
       if config.hide_cursor == true then

@@ -1,6 +1,7 @@
 local utils = require("git-dashboard-nvim.utils")
 local config = require("git-dashboard-nvim.config")
-local is_windows = vim.fn.has("win32")
+
+local is_windows = vim.fn.has("win32") == 1
 local null = is_windows and "NUL" or "/dev/null"
 
 Git = {}

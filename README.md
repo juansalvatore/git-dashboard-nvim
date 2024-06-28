@@ -9,9 +9,6 @@
 <img width="831" alt="image" src="https://github.com/juansalvatore/git-dashboard-nvim/assets/11010928/85609c97-22be-4a92-8f21-568c00f1d207">
 </div>
 
-### 🚧 Warning 
-This plugin is in alpha version and you may encounter unexpected edge cases. I developed the plugin for personal use but I figured people might enjoy using it.
-I may add breaking changes to improve the config in the future.
 
 ## ⇁ TOC
 * [Intro](#-Intro)
@@ -28,6 +25,7 @@ I may add breaking changes to improve the config in the future.
 It uses [vimdev/dashboard-nvim](https://github.com/nvimdev/dashboard-nvim) or [goolord/alpha-nvim](https://github.com/goolord/alpha-nvim) as the base for the dashboard and this plugin generates the header dynamically that we can pass to dashboard-nvim or alpha-nvim. 
 It allows you to track project based progress in a visual way, making your nvim dashboard look cool while still being useful by showcasing the current git branch and project.
 I've mainly developed this plugin for myself, so to make sure it looks well for you, check the [Style Variations](#-Style-Variations) section, to see some fun styling configurations.
+Take into accout that this plugin is in alpha version and you may encounter some unexpected edge cases.
 
 
 ## ⇁ Installation

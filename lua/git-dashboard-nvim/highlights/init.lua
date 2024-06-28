@@ -57,7 +57,12 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
   end
 
   -- add highlight to match any number
-  vim.cmd("call matchadd('DashboardHeaderMonth', '\\d\\+')")
+  -- vim.cmd("call matchadd('DashboardHeaderMonth', '\\d\\+')")
+  Highlights._add_highlight_group(
+    "DashboardHeaderMonth",
+    "\\d\\+",
+    config.colors.days_and_months_labels
+  )
 
   Highlights._add_highlight_group("DashboardHeaderTitle", title, config.colors.dashboard_title)
 
@@ -67,11 +72,11 @@ Highlights.add_highlights = function(config, current_date_info, branch_label, ti
     config.colors.branch_highlight
   )
 
-  vim.cmd.autocmd(
-    "BufLeave",
-    "*",
-    "highlight clear DashboardHeaderEmptySquare | highlight clear DashboardHeaderDay | highlight clear DashboardHeaderMonth | highlight clear DashboardHeaderFilledSquare | highlight clear DashboardHeaderTitle | highlight clear DashboardHeaderBranch"
-  )
+  -- vim.cmd.autocmd(
+  --   "BufLeave",
+  --   "*",
+  --   "highlight clear DashboardHeaderEmptySquare | highlight clear DashboardHeaderDay | highlight clear DashboardHeaderMonth | highlight clear DashboardHeaderFilledSquare | highlight clear DashboardHeaderTitle | highlight clear DashboardHeaderBranch"
+  -- )
   -- set cursor color to white when leaving the buffer
   vim.cmd.autocmd("BufLeave", "*", "highlight Cursor blend=0")
   vim.cmd.autocmd("BufLeave", "*", "set guicursor+=a:Cursor/lCursor")

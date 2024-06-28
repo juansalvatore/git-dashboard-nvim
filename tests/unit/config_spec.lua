@@ -59,6 +59,8 @@ describe("config", function()
         branch_highlight = "#8DC07C",
         dashboard_title = "#a3cc96",
       },
+      basepoints = { "master", "main" },
+      use_git_username_as_author = false,
     })
   end)
 
@@ -145,6 +147,8 @@ describe("config", function()
         branch_highlight = "#8DC07C",
         dashboard_title = "#a3cc96",
       },
+      basepoints = { "master", "main" },
+      use_git_username_as_author = false,
     })
   end)
 end)

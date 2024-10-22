@@ -27,7 +27,7 @@ end
 
 Git._parse_repo_and_owner = function(remote_url)
   return remote_url:match(".*%..*[:/]([^/]+/[^/.]+)")
-    or remote_url:match(".*%..*[:/]([^/]+/[^/.]+).git")
+    or remote_url:match(".*%..*[:/]([^/]+/[^/]+).git")
     or ""
 end
 

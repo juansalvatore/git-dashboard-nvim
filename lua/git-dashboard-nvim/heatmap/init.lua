@@ -15,7 +15,7 @@ Heatmap.generate_heatmap = function(config)
   local repo_with_owner = Git.get_repo_with_owner() -- owner/repo
 
   if repo_with_owner == "" or not repo_with_owner then
-    return ""
+    repo_with_owner = vim.fn.getcwd()
   end
 
   local author = config.author

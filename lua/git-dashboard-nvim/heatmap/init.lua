@@ -25,10 +25,6 @@ Heatmap.generate_heatmap = function(config)
 
   local commits = Git.get_commit_dates(author, config.branch)
 
-  if #commits == 0 then
-    return ""
-  end
-
   local current_date_info = utils.current_date_info()
 
   local base_heatmap = HeatmapUtils.generate_base_heatmap(commits, current_date_info)

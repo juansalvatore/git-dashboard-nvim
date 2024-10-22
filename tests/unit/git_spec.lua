@@ -38,6 +38,22 @@ describe("git", function()
       assert(repo_with_owner == "juansalvatore/git-dashboard-nvim")
     end)
 
+    it("should parse repo with extra dot in name", function()
+      local git = require("git-dashboard-nvim.git")
+      local repo_with_owner = git._parse_repo_and_owner("git@github.com:csessh/.dotfiles.git")
+
+      assert(repo_with_owner ~= nil)
+      assert(repo_with_owner == "csessh/.dotfiles")
+    end)
+
+    it("should parse repo with extra dot in name", function()
+      local git = require("git-dashboard-nvim.git")
+      local repo_with_owner = git._parse_repo_and_owner("git@github.com:csessh/test.nvim.git")
+
+      assert(repo_with_owner ~= nil)
+      assert(repo_with_owner == "csessh/test.nvim")
+    end)
+
     it("should parse repo with owner from github ssh url without .git", function()
       local git = require("git-dashboard-nvim.git")
       local repo_with_owner =

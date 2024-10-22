@@ -26,9 +26,7 @@ Git.get_repo_with_owner = function()
 end
 
 Git._parse_repo_and_owner = function(remote_url)
-  return remote_url:match(".*%..*[:/]([^/]+/[^/.]+)")
-    or remote_url:match(".*%..*[:/]([^/]+/[^/]+).git")
-    or ""
+  return remote_url:match(".*%..*[:/]([^/]+/[^/]+).git") or ""
 end
 
 Git.get_username = function()

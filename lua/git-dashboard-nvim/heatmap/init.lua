@@ -15,7 +15,7 @@ Heatmap.generate_heatmap = function(config)
   local repo_with_owner = Git.get_repo_with_owner() -- owner/repo
 
   if repo_with_owner == "" or not repo_with_owner then
-    return ""
+    repo_with_owner = vim.fn.getcwd()
   end
 
   local author = config.author
@@ -24,10 +24,6 @@ Heatmap.generate_heatmap = function(config)
   end
 
   local commits = Git.get_commit_dates(author, config.branch)
-
-  if #commits == 0 then
-    return ""
-  end
 
   local current_date_info = utils.current_date_info()
 

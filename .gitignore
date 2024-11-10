@@ -4,4 +4,4 @@ doc/tags
 Session.vim
 .DS_Store
 NUL
-
+.editorconfig

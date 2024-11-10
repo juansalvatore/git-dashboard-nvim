@@ -6,6 +6,22 @@ local null = is_windows and "NUL" or "/dev/null"
 
 Git = {}
 
+---@return boolean
+Git.is_git_repo = function()
+  local handle = io.popen("git status &>" .. null .. "; echo $?")
+  if not handle then
+    return false
+  end
+
+  local exit_code = handle:read("*a")
+  handle:close()
+
+  -- git status command returns 
+  -- 0 exit code if it is a git repository,
+  -- 128 exit code otherwise
+  return tonumber(exit_code) == 0
+end
+
 ---@return string
 Git.get_repo_with_owner = function()
   local handle = io.popen("git remote get-url origin 2>" .. null)

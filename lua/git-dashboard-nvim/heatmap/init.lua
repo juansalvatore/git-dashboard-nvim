@@ -7,6 +7,10 @@ Heatmap = {}
 ---@param config Config
 ---@return string
 Heatmap.generate_heatmap = function(config)
+  if not Git.is_git_repo() then
+    return ""
+  end
+
   if config.use_current_branch then
     config.branch = Git.get_current_branch()
   end
@@ -24,13 +28,20 @@ Heatmap.generate_heatmap = function(config)
   end
 
   local commits = Git.get_commit_dates(author, config.branch)
-
   local current_date_info = utils.current_date_info()
 
-  local base_heatmap = HeatmapUtils.generate_base_heatmap(commits, current_date_info)
+  local base_heatmap = HeatmapUtils.generate_base_heatmap(
+    commits,
+    current_date_info
+  )
 
-  local ascii_heatmap =
-    HeatmapUtils.generate_ascii_heatmap(base_heatmap, config, repo_with_owner, current_date_info)
+  local ascii_heatmap = HeatmapUtils.generate_ascii_heatmap(
+    base_heatmap,
+    config,
+    repo_with_owner,
+    current_date_info
+  )
+
   return ascii_heatmap
 end
 

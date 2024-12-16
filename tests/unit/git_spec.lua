@@ -104,4 +104,11 @@ describe("git", function()
 
     assert(commits ~= nil)
   end)
+
+  it("should return git status exit code 0", function()
+    local git = require("git-dashboard-nvim.git")
+    local is_git_repo = git.is_git_repo()
+
+    assert(is_git_repo == true)
+  end)
 end)

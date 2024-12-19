@@ -8,19 +8,18 @@ Git = {}
 
 ---@return boolean
 Git.is_git_repo = function()
-  local handle = io.popen("git status &>" .. null .. "; echo $?")
+  local handle = io.popen("git rev-parse --is-inside-work-tree 2>" .. null)
   if not handle then
     return false
   end
 
-  local exit_code = handle:read("*a")
+  local result = vim.trim(handle:read("*a"))
   handle:close()
 
-  -- git status command returns 
-  -- 0 exit code if it is a git repository,
-  -- 128 exit code otherwise
-  return tonumber(exit_code) == 0
+  return result == "true"
 end
+
+print(Git.is_git_repo())
 
 ---@return string
 Git.get_repo_with_owner = function()

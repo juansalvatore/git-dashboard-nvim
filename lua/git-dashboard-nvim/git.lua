@@ -19,8 +19,6 @@ Git.is_git_repo = function()
   return result == "true"
 end
 
-print(Git.is_git_repo())
-
 ---@return string
 Git.get_repo_with_owner = function()
   local handle = io.popen("git remote get-url origin 2>" .. null)

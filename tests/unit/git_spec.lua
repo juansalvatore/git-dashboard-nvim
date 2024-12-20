@@ -105,7 +105,7 @@ describe("git", function()
     assert(commits ~= nil)
   end)
 
-  it("should return tre if in git repo", function()
+  it("should return true if in a git repo", function()
     local git = require("git-dashboard-nvim.git")
     local is_git_repo = git.is_git_repo()
 
